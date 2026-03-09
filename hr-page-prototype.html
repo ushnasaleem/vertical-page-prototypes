@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agents for Recruiting | Beam</title>
+  <meta name="description" content="AI agents that screen, schedule, and submit so your recruiters close more deals. Place 40% more roles with the same team. See a live demo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #0f0c36;
+      --bg-dark: #131415;
+      --bg-surface: #18181b;
+      --bg-card: #1e1e22;
+      --bg-card-hover: #252529;
+      --bg-elevated: #2a2a30;
+
+      --blue-primary: #004ecc;
+      --blue-bright: #1a66ff;
+      --blue-light: #99c0ff;
+      --blue-subtle: rgba(26, 102, 255, 0.1);
+      --blue-glow: rgba(26, 102, 255, 0.15);
+
+      --text-white: #ffffff;
+      --text-light: rgba(255, 255, 255, 0.9);
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.4);
+
+      --green: #00c48c;
+      --green-subtle: rgba(0, 196, 140, 0.12);
+
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --border-light: rgba(255, 255, 255, 0.12);
+      --border-blue: rgba(26, 102, 255, 0.3);
+
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --max-width: 1200px;
+
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Inter', -apple-system, sans-serif; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(19, 20, 21, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 0 40px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--text-white); display: flex; align-items: center; gap: 3px;
+    }
+    .nav-logo .beam-dot {
+      width: 8px; height: 8px; background: var(--blue-bright);
+      border-radius: 50%; display: inline-block; margin-left: 1px;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-white); }
+    .nav-cta {
+      background: var(--blue-primary) !important; color: white !important;
+      padding: 8px 20px; border-radius: var(--radius-sm); font-weight: 600 !important;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--blue-bright) !important;
+      box-shadow: 0 4px 16px rgba(26, 102, 255, 0.3);
+    }
+
+    /* SECTIONS */
+    section { padding: 100px 40px; }
+    .container { max-width: var(--max-width); margin: 0 auto; }
+
+    /* ==================== HERO ==================== */
+    .hero {
+      padding-top: 140px; padding-bottom: 80px;
+      background: var(--bg-deep); position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26, 102, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center; position: relative; z-index: 1;
+    }
+    .eyebrow {
+      display: inline-block; padding: 6px 16px;
+      border: 1px solid var(--border-light); border-radius: 100px;
+      font-size: 13px; font-weight: 500; color: var(--blue-light);
+      margin-bottom: 24px; letter-spacing: 0.3px; background: var(--blue-subtle);
+    }
+    .hero h1 {
+      font-size: 50px; font-weight: 800; line-height: 1.08;
+      letter-spacing: -1.5px; margin-bottom: 20px; color: var(--text-white);
+    }
+    .hero .sub {
+      font-size: 17px; color: var(--text-secondary); line-height: 1.7;
+      margin-bottom: 36px; max-width: 500px;
+    }
+    .cta-row { display: flex; gap: 0; margin-bottom: 48px; }
+    .cta-row input {
+      flex: 1; max-width: 300px; padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-light); border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      color: var(--text-white); font-size: 14px; font-family: inherit; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cta-row input:focus { border-color: var(--blue-bright); background: rgba(255, 255, 255, 0.08); }
+    .cta-row input::placeholder { color: var(--text-muted); }
+    .cta-row button {
+      padding: 14px 24px; background: var(--blue-primary); color: white;
+      border: 1px solid var(--blue-primary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s, box-shadow 0.2s;
+    }
+    .cta-row button:hover { background: var(--blue-bright); box-shadow: 0 4px 20px rgba(26, 102, 255, 0.35); }
+
+    /* WORKFLOW UI */
+    .workflow-ui {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg); padding: 28px; position: relative;
+    }
+    .workflow-ui::before {
+      content: ''; position: absolute; top: -1px; left: 30%; right: 30%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue-bright), transparent); opacity: 0.5;
+    }
+    .workflow-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+      font-size: 11px; color: var(--text-muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+    }
+    .workflow-header .dot {
+      width: 6px; height: 6px; background: var(--green);
+      border-radius: 50%; animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .wf-step {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; margin-bottom: 6px;
+      border-radius: var(--radius-sm); font-size: 13px; transition: background 0.2s;
+    }
+    .wf-step:hover { background: rgba(255,255,255,0.03); }
+    .wf-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0;
+    }
+    .wf-icon.trigger { background: var(--blue-subtle); color: var(--blue-bright); }
+    .wf-icon.ok { background: var(--green-subtle); color: var(--green); }
+    .wf-icon.process { background: rgba(234,179,8,0.1); color: #eab308; }
+    .wf-label { font-weight: 600; color: var(--text-light); }
+    .wf-detail { color: var(--text-muted); font-size: 12px; }
+    .wf-result {
+      margin-top: 12px; padding: 14px 16px;
+      background: rgba(0, 196, 140, 0.06);
+      border: 1px solid rgba(0, 196, 140, 0.15);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .wf-result .label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .wf-result .badge {
+      padding: 5px 14px; background: var(--green-subtle); color: var(--green);
+      border-radius: 100px; font-size: 12px; font-weight: 600;
+    }
+
+    /* LOGOS ROW */
+    .logo-row {
+      display: flex; align-items: center; gap: 20px;
+      flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .logo-item {
+      font-size: 12px; color: var(--text-muted); font-weight: 500;
+      padding: 6px 14px; border: 1px solid var(--border-dark);
+      border-radius: 6px; transition: border-color 0.2s, color 0.2s;
+    }
+    .logo-item:hover { border-color: var(--border-light); color: var(--text-secondary); }
+
+    /* ==================== STAT CARDS ==================== */
+    .stats-section {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border-dark); border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .stat-card { text-align: center; padding: 52px 28px; background: var(--bg-surface); }
+    .stat-number {
+      font-family: 'DM Mono', 'Inter', monospace;
+      font-size: 52px; font-weight: 500; letter-spacing: -2px;
+      line-height: 1; margin-bottom: 10px; color: var(--blue-bright);
+    }
+    .stat-desc { font-size: 15px; color: var(--text-light); margin-bottom: 8px; font-weight: 500; }
+    .stat-attr { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+    /* ==================== NAMED AGENTS ==================== */
+    .agents-section { background: var(--bg-dark); }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header h2 {
+      font-size: 38px; font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 14px; color: var(--text-white);
+    }
+    .section-header p {
+      font-size: 16px; color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto; line-height: 1.7;
+    }
+    .agents-layout {
+      display: grid; grid-template-columns: 280px 1fr;
+      gap: 32px; align-items: start;
+    }
+
+    /* FUNNEL VISUAL */
+    .funnel-visual {
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border-dark);
+    }
+    .funnel-stage {
+      padding: 20px; background: var(--bg-card);
+      border-bottom: 1px solid var(--border-dark); position: relative;
+    }
+    .funnel-stage:last-child { border-bottom: none; }
+    .funnel-stage-top {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+    }
+    .funnel-stage-icon { font-size: 14px; }
+    .funnel-stage-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--blue-light);
+    }
+    .funnel-tools {
+      font-size: 11px; color: var(--text-muted); line-height: 1.5;
+      padding-left: 22px; margin-bottom: 10px;
+    }
+    .funnel-count {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; margin-left: 22px;
+    }
+    .funnel-count.c1 { background: rgba(26,102,255,0.12); color: var(--blue-bright); }
+    .funnel-count.c2 { background: rgba(0,196,140,0.1); color: #00c48c; }
+    .funnel-count.c3 { background: rgba(168,85,247,0.1); color: #a855f7; }
+    .funnel-count.c4 { background: rgba(234,179,8,0.1); color: #eab308; }
+    .funnel-arrow {
+      display: flex; justify-content: center; padding: 4px 0;
+      background: var(--bg-card); border-bottom: 1px solid var(--border-dark);
+    }
+    .funnel-arrow span {
+      font-size: 14px; color: var(--text-muted); opacity: 0.5;
+    }
+
+    /* AGENT CARDS */
+    .agent-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .agent-card {
+      background: var(--bg-card); border: 1px solid var(--border-dark);
+      border-radius: var(--radius); padding: 24px;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      cursor: pointer; text-decoration: none; color: inherit; display: block;
+    }
+    .agent-card:hover {
+      border-color: var(--border-blue);
+      box-shadow: 0 4px 24px rgba(26, 102, 255, 0.08);
+      transform: translateY(-2px);
+    }
+    .agent-card h3 {
+      font-size: 15px; font-weight: 700; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--text-white);
+    }
+    .agent-card h3 .arrow {
+      color: var(--text-muted); font-size: 16px;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .agent-card:hover h3 .arrow { color: var(--blue-bright); transform: translateX(3px); }
+    .agent-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+    .agent-tag {
+      padding: 2px 8px; background: var(--blue-subtle); color: var(--blue-light);
+      border-radius: 4px; font-size: 11px; font-weight: 600;
+    }
+    .agent-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .explore-link { text-align: center; margin-top: 24px; }
+    .explore-link a {
+      color: var(--blue-bright); text-decoration: none;
+      font-weight: 600; font-size: 14px; transition: color 0.2s;
+    }
+    .explore-link a:hover { color: var(--blue-light); }
+
+    /* ==================== HOW IT WORKS ==================== */
+    .how-section {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-dark);
+    }
+    .steps-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; margin-bottom: 40px; position: relative;
+    }
+    .steps-row::before {
+      content: ''; position: absolute; top: 32px;
+      left: calc(16.66% + 20px); right: calc(16.66% + 20px);
+      height: 2px; background: var(--border-light);
+    }
+    .step-item { text-align: center; position: relative; z-index: 1; }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--blue-primary); color: white;
+      font-size: 18px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; position: relative; z-index: 1;
+      box-shadow: 0 0 0 6px var(--bg-surface);
+    }
+    .step-item h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text-white); }
+    .step-item .timeline {
+      font-family: 'DM Mono', monospace; font-size: 12px;
+      color: var(--blue-bright); font-weight: 500; margin-bottom: 10px;
+    }
+    .step-item p {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.6; max-width: 300px; margin: 0 auto;
+    }
+    .callout-box {
+      text-align: center; padding: 20px 28px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dark); border-radius: var(--radius-sm);
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 36px;
+    }
+    .callout-box strong { color: var(--text-white); }
+    .screenshot-placeholder {
+      width: 100%; height: 300px; background: var(--bg-card);
+      border: 1px dashed var(--border-light); border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 13px; font-weight: 500;
+    }
+
+    /* ==================== SOCIAL PROOF ==================== */
+    .proof-section {
+      background: var(--bg-deep); position: relative;
+    }
+    .proof-section::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(26,102,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .quote-block {
+      max-width: 760px; margin: 0 auto 40px; padding: 44px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dark); border-radius: var(--radius-lg);
+      position: relative; z-index: 1;
+    }
+    .quote-mark { font-size: 64px; line-height: 1; color: var(--blue-bright); opacity: 0.2; margin-bottom: -12px; }
+    .quote-text {
+      font-size: 19px; line-height: 1.7; color: var(--text-light);
+      font-weight: 500; margin-bottom: 28px; font-style: italic;
+    }
+    .quote-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .quote-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .quote-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-elevated); border: 1px solid var(--border-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--text-muted);
+    }
+    .quote-name { font-size: 14px; font-weight: 600; color: var(--text-light); }
+    .quote-title { font-size: 12px; color: var(--text-muted); }
+    .quote-company { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
+    .quote-link {
+      display: block; margin-top: 14px; color: var(--blue-bright);
+      text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s;
+    }
+    .quote-link:hover { color: var(--blue-light); }
+    .warm-cta-box {
+      max-width: 560px; margin: 0 auto; text-align: center; padding: 28px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dark); border-radius: var(--radius);
+      position: relative; z-index: 1;
+    }
+    .warm-cta-box p { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; }
+    .btn-outline {
+      display: inline-block; padding: 10px 24px;
+      border: 1px solid var(--blue-primary); color: var(--blue-bright);
+      border-radius: var(--radius-sm); text-decoration: none;
+      font-weight: 600; font-size: 13px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--blue-primary); color: white;
+      box-shadow: 0 4px 16px rgba(26,102,255,0.3);
+    }
+
+    /* ==================== PLATFORM + TRUST ==================== */
+    .trust-section { background: var(--bg-dark); }
+    .integrations-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; margin-bottom: 32px;
+    }
+    .int-category h4 {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+    .int-items { display: flex; flex-direction: column; gap: 6px; }
+    .int-item {
+      padding: 8px 14px; background: var(--bg-card);
+      border: 1px solid var(--border-dark); border-radius: 6px;
+      font-size: 12px; color: var(--text-secondary); font-weight: 500;
+      transition: border-color 0.2s;
+    }
+    .int-item:hover { border-color: var(--border-light); }
+    .sub-heading {
+      font-size: 22px; font-weight: 700; margin-bottom: 20px; color: var(--text-white);
+    }
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .pillar {
+      padding: 24px; background: var(--bg-card);
+      border: 1px solid var(--border-dark); border-radius: var(--radius);
+      transition: border-color 0.2s;
+    }
+    .pillar:hover { border-color: var(--border-light); }
+    .pillar-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; margin-bottom: 14px;
+    }
+    .pillar-icon.shield { background: rgba(26,102,255,0.1); }
+    .pillar-icon.audit { background: rgba(168,85,247,0.1); }
+    .pillar-icon.eye { background: rgba(234,179,8,0.1); }
+    .pillar-icon.lock { background: rgba(0,196,140,0.1); }
+    .pillar h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text-white); }
+    .pillar p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .region-btns { display: flex; gap: 6px; margin-top: 10px; }
+    .region-btn {
+      padding: 3px 10px; background: var(--bg-elevated);
+      border: 1px solid var(--border-dark); border-radius: 4px;
+      font-size: 10px; font-weight: 700; color: var(--text-muted);
+      cursor: pointer; transition: border-color 0.2s, color 0.2s; font-family: inherit;
+    }
+    .region-btn:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+    .hitl-box {
+      margin-top: 24px; padding: 16px 20px;
+      background: rgba(26,102,255,0.04);
+      border: 1px solid rgba(26,102,255,0.12); border-radius: var(--radius-sm);
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+    }
+    .hitl-box strong { color: var(--text-light); }
+
+    /* ==================== CASE STUDIES ==================== */
+    .cases-section {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-dark);
+    }
+    .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .case-card {
+      padding: 36px; background: var(--bg-card);
+      border: 1px solid var(--border-dark); border-radius: var(--radius);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .case-card:hover { border-color: var(--border-light); box-shadow: var(--shadow-card); }
+    .case-company {
+      font-size: 11px; color: var(--text-muted); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+    }
+    .case-metric {
+      font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 14px; color: var(--text-white);
+    }
+    .case-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 18px; }
+    .case-link {
+      color: var(--blue-bright); text-decoration: none;
+      font-size: 13px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s;
+    }
+    .case-link:hover { gap: 10px; }
+
+    /* ==================== FAQ ==================== */
+    .faq-section { background: var(--bg-dark); }
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--border-dark); }
+    .faq-question {
+      width: 100%; background: none; border: none; padding: 22px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-family: inherit; text-align: left;
+    }
+    .faq-question span { font-size: 15px; font-weight: 600; color: var(--text-light); }
+    .faq-question .chev {
+      font-size: 18px; color: var(--text-muted);
+      transition: transform 0.3s, color 0.3s; flex-shrink: 0; margin-left: 20px;
+    }
+    .faq-item.open .faq-question .chev { transform: rotate(180deg); color: var(--blue-bright); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-item.open .faq-answer { max-height: 300px; padding-bottom: 20px; }
+    .faq-answer p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+
+    /* ==================== FINAL CTA ==================== */
+    .final-cta {
+      background: var(--bg-deep); text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .final-cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(26,102,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      font-size: 40px; font-weight: 800; letter-spacing: -1.5px;
+      margin-bottom: 28px; position: relative; z-index: 1;
+    }
+    .final-cta .cta-row {
+      justify-content: center; margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .final-secondary {
+      color: var(--text-muted); font-size: 13px; margin-bottom: 32px;
+      position: relative; z-index: 1;
+    }
+    .final-secondary a {
+      color: var(--blue-bright); text-decoration: none; font-weight: 600;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 40px; border-top: 1px solid var(--border-dark);
+      background: var(--bg-dark); text-align: center;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .agents-layout { grid-template-columns: 1fr; }
+      .integrations-grid { grid-template-columns: repeat(2, 1fr); }
+      .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      section { padding: 60px 20px; }
+      .hero h1 { font-size: 34px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr; gap: 32px; }
+      .steps-row::before { display: none; }
+      .agent-cards { grid-template-columns: 1fr; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .integrations-grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .final-cta h2 { font-size: 30px; }
+      .section-header h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">beam<span class="beam-dot"></span></div>
+  <div class="nav-links">
+    <a href="#">Solutions</a>
+    <a href="#">Platform</a>
+    <a href="#">Agents</a>
+    <a href="#">Resources</a>
+    <a href="#" class="nav-cta">See a live demo</a>
+  </div>
+</nav>
+
+<!-- SECTION 1: HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">For RPOs &amp; Staffing</div>
+        <h1>Place 40% More Roles.<br>With the Same Team</h1>
+        <p class="sub">AI agents that screen, schedule, and submit so your recruiters close more deals.</p>
+        <div class="cta-row">
+          <input type="email" placeholder="Enter your work email">
+          <button>See a live demo</button>
+        </div>
+        <div class="logo-row">
+          <div class="logo-item">Booth &amp; Partners</div>
+          <div class="logo-item">LimeHome</div>
+          <div class="logo-item">Client 3</div>
+          <div class="logo-item">Client 4</div>
+          <div class="logo-item">Client 5</div>
+        </div>
+      </div>
+      <div class="workflow-ui">
+        <div class="workflow-header">
+          <div class="dot"></div>
+          Hiring Pipeline Active
+        </div>
+        <div class="wf-step">
+          <div class="wf-icon trigger">&#9889;</div>
+          <div>
+            <div class="wf-label">Job req enters system</div>
+            <div class="wf-detail">Senior Frontend Developer, Austin TX</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-icon ok">&#10003;</div>
+          <div>
+            <div class="wf-label">Sourcer finds 247 candidates</div>
+            <div class="wf-detail">Indeed, LinkedIn, Workable</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-icon ok">&#10003;</div>
+          <div>
+            <div class="wf-label">Screening narrows to 23 qualified</div>
+            <div class="wf-detail">Rubric match, experience filter, skills check</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-icon ok">&#10003;</div>
+          <div>
+            <div class="wf-label">Outreach engages top 12</div>
+            <div class="wf-detail">Personalized messages via email + LinkedIn</div>
+          </div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-icon process">&#8635;</div>
+          <div>
+            <div class="wf-label">Scheduler books 8 interviews</div>
+            <div class="wf-detail">Google Calendar, no back-and-forth</div>
+          </div>
+        </div>
+        <div class="wf-result">
+          <div class="label">Pipeline Status</div>
+          <div class="badge">&#10003; 8 interviews booked</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: STAT CARDS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">50%</div>
+        <div class="stat-desc">reduction in time-to-fill</div>
+        <div class="stat-attr">Booth &amp; Partners</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">792</div>
+        <div class="stat-desc">hours saved per month</div>
+        <div class="stat-attr">[Client Name]</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">40%</div>
+        <div class="stat-desc">higher offer acceptance</div>
+        <div class="stat-attr">[Client Name]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: NAMED AGENTS -->
+<section class="agents-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Every open role, filled faster with AI agents</h2>
+      <p>6 agents power one hiring pipeline, from sourcing to scheduling.</p>
+    </div>
+    <div class="agents-layout">
+      <!-- LEFT: Funnel visual -->
+      <div class="funnel-visual">
+        <div class="funnel-stage">
+          <div class="funnel-stage-top">
+            <span class="funnel-stage-icon">&#128269;</span>
+            <span class="funnel-stage-label">Source</span>
+          </div>
+          <div class="funnel-tools">Indeed, LinkedIn, Workable</div>
+          <span class="funnel-count c1">247 candidates</span>
+        </div>
+        <div class="funnel-arrow"><span>&#9660;</span></div>
+        <div class="funnel-stage">
+          <div class="funnel-stage-top">
+            <span class="funnel-stage-icon">&#10003;</span>
+            <span class="funnel-stage-label">Screen</span>
+          </div>
+          <div class="funnel-tools">Bullhorn, Rubric</div>
+          <span class="funnel-count c2">23 qualified</span>
+        </div>
+        <div class="funnel-arrow"><span>&#9660;</span></div>
+        <div class="funnel-stage">
+          <div class="funnel-stage-top">
+            <span class="funnel-stage-icon">&#9993;</span>
+            <span class="funnel-stage-label">Engage</span>
+          </div>
+          <div class="funnel-tools">Gmail, Slack</div>
+          <span class="funnel-count c3">12 engaged</span>
+        </div>
+        <div class="funnel-arrow"><span>&#9660;</span></div>
+        <div class="funnel-stage">
+          <div class="funnel-stage-top">
+            <span class="funnel-stage-icon">&#128197;</span>
+            <span class="funnel-stage-label">Schedule</span>
+          </div>
+          <div class="funnel-tools">Google Calendar</div>
+          <span class="funnel-count c4">8 booked</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: 2x2 Agent card grid -->
+      <div>
+        <div class="agent-cards">
+          <a href="https://beam.ai/agents/talent-sourcing-ai-agent" class="agent-card">
+            <h3>Talent Sourcing AI Agent <span class="arrow">&rarr;</span></h3>
+            <div class="agent-tags"><span class="agent-tag">Sourcing</span><span class="agent-tag">Ranking</span></div>
+            <p>Finds and ranks candidates from multiple boards per role.</p>
+          </a>
+          <a href="https://beam.ai/agents/candidate-screening-agent" class="agent-card">
+            <h3>Candidate Screening Agent <span class="arrow">&rarr;</span></h3>
+            <div class="agent-tags"><span class="agent-tag">Screening</span><span class="agent-tag">Scoring</span></div>
+            <p>Scores against your rubric in minutes, not days.</p>
+          </a>
+          <a href="https://beam.ai/agents/candidate-outreach-agent" class="agent-card">
+            <h3>Candidate Outreach Agent <span class="arrow">&rarr;</span></h3>
+            <div class="agent-tags"><span class="agent-tag">Outreach</span><span class="agent-tag">Email</span></div>
+            <p>Personalizes outreach at scale. 3x reply rate.</p>
+          </a>
+          <a href="https://beam.ai/agents/interview-scheduling-agent" class="agent-card">
+            <h3>Interview Scheduling Agent <span class="arrow">&rarr;</span></h3>
+            <div class="agent-tags"><span class="agent-tag">Scheduling</span><span class="agent-tag">Calendar</span></div>
+            <p>Books across calendars, no back-and-forth.</p>
+          </a>
+        </div>
+        <div class="explore-link">
+          <a href="https://beam.ai/agents?all-categories=human-resources">Explore all HR agents &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Go live in weeks, not months</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <h3>Connect</h3>
+        <div class="timeline">Day 1-2</div>
+        <p>Connect your ATS, HRIS, and job boards. Greenhouse, Lever, Ashby, and Workday all integrate with one click.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <h3>Configure</h3>
+        <div class="timeline">Day 3-5</div>
+        <p>Define your hiring criteria, screening rubrics, and outreach templates for each role.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <h3>Deploy</h3>
+        <div class="timeline">Day 6-14</div>
+        <p>Agents start working immediately, sourcing, screening, and scheduling candidates while you interview the best.</p>
+      </div>
+    </div>
+    <div class="callout-box">
+      <strong>No engineering required.</strong> Your ATS admin can set this up.
+    </div>
+    <div class="screenshot-placeholder">
+      [ Product screenshot: agent builder interface showing recruitment workflow configured with Bullhorn integration ]
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: SOCIAL PROOF -->
+<section class="proof-section">
+  <div class="container">
+    <div class="quote-block">
+      <div class="quote-mark">&ldquo;</div>
+      <p class="quote-text">We screened over 5,000 CVs with 97% accuracy. The team adopted it within two weeks.</p>
+      <div class="quote-footer">
+        <div>
+          <div class="quote-author">
+            <div class="quote-avatar">&#128100;</div>
+            <div>
+              <div class="quote-name">[Name], [Title]</div>
+              <div class="quote-title">Booth &amp; Partners</div>
+            </div>
+          </div>
+          <a href="#" class="quote-link">Read the full story &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="warm-cta-box">
+      <p>Not ready? Learn how recruitment teams cut time-to-fill by 50%.</p>
+      <a href="#" class="btn-outline">Watch the webinar &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: PLATFORM + TRUST -->
+<section class="trust-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Keep your stack. Add agents.</h2>
+    </div>
+    <div class="integrations-grid">
+      <div class="int-category">
+        <h4>ATS</h4>
+        <div class="int-items">
+          <div class="int-item">Greenhouse</div>
+          <div class="int-item">Lever</div>
+          <div class="int-item">Bullhorn</div>
+          <div class="int-item">iCIMS</div>
+          <div class="int-item">Ashby</div>
+          <div class="int-item">Workday ATS</div>
+        </div>
+      </div>
+      <div class="int-category">
+        <h4>HRIS</h4>
+        <div class="int-items">
+          <div class="int-item">Workday</div>
+          <div class="int-item">BambooHR</div>
+          <div class="int-item">Rippling</div>
+          <div class="int-item">ADP</div>
+          <div class="int-item">SuccessFactors</div>
+        </div>
+      </div>
+      <div class="int-category">
+        <h4>Communication</h4>
+        <div class="int-items">
+          <div class="int-item">Slack</div>
+          <div class="int-item">Microsoft Teams</div>
+          <div class="int-item">Gmail</div>
+          <div class="int-item">Outlook</div>
+          <div class="int-item">LinkedIn</div>
+        </div>
+      </div>
+      <div class="int-category">
+        <h4>Job Boards</h4>
+        <div class="int-items">
+          <div class="int-item">LinkedIn</div>
+          <div class="int-item">Indeed</div>
+          <div class="int-item">ZipRecruiter</div>
+        </div>
+      </div>
+      <div class="int-category">
+        <h4>Scheduling</h4>
+        <div class="int-items">
+          <div class="int-item">Google Calendar</div>
+          <div class="int-item">Outlook Calendar</div>
+          <div class="int-item">Calendly</div>
+        </div>
+      </div>
+      <div class="int-category">
+        <h4>Assessment</h4>
+        <div class="int-items">
+          <div class="int-item">HackerRank</div>
+          <div class="int-item">Codility</div>
+          <div class="int-item">TestGorilla</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">Deploy AI agents without compliance risk</h3>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-icon shield">&#128737;</div>
+        <h4>EEOC Compliant</h4>
+        <p>All screening criteria align with federal employment law.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon audit">&#9878;</div>
+        <h4>Bias Monitoring</h4>
+        <p>Continuous auditing runs across all protected categories.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon eye">&#128065;</div>
+        <h4>Full Transparency</h4>
+        <p>Every agent decision is explainable and auditable.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon lock">&#128274;</div>
+        <h4>Data Privacy</h4>
+        <p>SOC 2, GDPR, ISO 27001. Candidate data encrypted and never used for training.</p>
+        <div class="region-btns">
+          <button class="region-btn">US</button>
+          <button class="region-btn">EU</button>
+          <button class="region-btn">GCC</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hitl-box">
+      <span>&#9888;&#65039;</span>
+      <div><strong>Human-in-the-loop:</strong> Every agent action requires your approval before executing. Agents never make autonomous decisions on candidate data.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: CASE STUDIES -->
+<section class="cases-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>How recruitment leaders are using our AI agents</h2>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card">
+        <div class="case-company">Booth &amp; Partners</div>
+        <div class="case-metric">5,000+ CVs screened with 97% accuracy</div>
+        <p class="case-desc">100% team adoption within two weeks. Screening that used to take hours per batch now runs autonomously with human review on exceptions only.</p>
+        <a href="#" class="case-link">See their results &rarr;</a>
+      </div>
+      <div class="case-card">
+        <div class="case-company">LimeHome</div>
+        <div class="case-metric">[Key metric TBD]</div>
+        <p class="case-desc">[Case study details to be confirmed with Harris team.]</p>
+        <a href="#" class="case-link">See their results &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What are AI agents for recruitment and how do they work?</span>
+          <span class="chev">&#9660;</span>
+        </button>
+        <div class="faq-answer">
+          <p>AI agents are autonomous software programs that handle specific recruitment tasks end-to-end. Beam's agents connect to your existing tools (like Bullhorn, Workday, or Greenhouse), follow rules you define, and execute tasks like screening candidates, scheduling interviews, and generating outreach messages. Unlike simple automation, agents can handle complex, multi-step workflows and make decisions based on the criteria you set.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How does Beam integrate with my ATS and HRIS?</span>
+          <span class="chev">&#9660;</span>
+        </button>
+        <div class="faq-answer">
+          <p>Beam integrates natively with Bullhorn, Workday, BambooHR, iCIMS, Greenhouse, Lever, and 200+ other tools. Setup typically takes days, not months. Your agents pull candidate data from your ATS, update records automatically, and sync across systems so your team always works from current information. No engineering required -- your ATS admin can set this up.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Will AI agents replace my recruiters?</span>
+          <span class="chev">&#9660;</span>
+        </button>
+        <div class="faq-answer">
+          <p>No. Beam agents handle the repetitive, time-consuming tasks that prevent your recruiters from doing what they do best: building relationships and closing candidates. Recruiters who use AI agents place 40% more roles because they spend time on high-value activities instead of manual screening and scheduling. Every agent action goes through human approval before executing.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Is the screening process EEOC compliant?</span>
+          <span class="chev">&#9660;</span>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. Beam's screening agents evaluate candidates against the specific criteria you define, aligned with federal employment law. Continuous bias monitoring audits decisions across all protected categories. Every screening decision is fully explainable and auditable. Your legal and compliance team gets complete transparency into how agents evaluate candidates.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How can I measure ROI from AI recruitment agents?</span>
+          <span class="chev">&#9660;</span>
+        </button>
+        <div class="faq-answer">
+          <p>Track three metrics: time-to-fill reduction (our customers see an average 50% decrease), recruiter productivity (hours saved on manual tasks, up to 792 hours monthly), and placement quality (measured by offer acceptance rates, typically 40% higher). Beam's Recruiting Analyst Agent provides real-time dashboards tracking these metrics against your baseline.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9: FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Try Beam for your recruiting team</h2>
+    <div class="cta-row">
+      <input type="email" placeholder="Enter your work email">
+      <button>See a live demo</button>
+    </div>
+    <p class="final-secondary">Not ready? <a href="#">Get our free guide to faster, fairer hiring &rarr;</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">&copy; 2026 Beam AI. All rights reserved.</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!open) item.classList.add('open');
+    });
+  });
+</script>
+
+</body>
+</html>
