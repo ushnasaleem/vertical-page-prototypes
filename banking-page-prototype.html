@@ -401,120 +401,131 @@
       margin: 0 auto;
       line-height: 1.7;
     }
-    .agents-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 32px;
-      align-items: start;
+    /* AGENT ROWS */
+    .agent-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
-
-    /* FLOW VISUAL */
-    .flow-visual {
+    .agent-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      border: 1px solid var(--border-dark);
+      transition: border-color 0.3s;
     }
-    .flow-area {
-      padding: 22px 20px;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border-dark);
+    .agent-row:hover {
+      border-color: var(--border-light);
     }
-    .flow-area:last-child { border-bottom: none; }
-    .flow-area-top {
+    .agent-row.reverse .agent-row-screenshot { order: 2; }
+    .agent-row.reverse .agent-row-content { order: 1; }
+    .agent-row-screenshot {
+      background: var(--bg-surface);
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
+      justify-content: center;
+      padding: 40px;
+      min-height: 280px;
+      position: relative;
+      overflow: hidden;
     }
-    .flow-area-icon { font-size: 14px; }
-    .flow-area-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--blue-light);
+    .agent-row-screenshot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26, 102, 255, 0.03) 0%, rgba(26, 102, 255, 0.08) 100%);
     }
-    .flow-area-subs {
-      font-size: 12px;
+    .screenshot-placeholder {
       color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 10px;
-      padding-left: 22px;
+      font-size: 13px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 24px;
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius);
+      width: 100%;
     }
-    .flow-badge {
+    .agent-row-content {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .agent-row-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    .agent-row-content .row-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .agent-row-content .see-all {
+      font-size: 13px;
+      color: var(--blue-light);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 20px;
       display: inline-block;
-      padding: 3px 10px;
+      transition: color 0.2s;
+    }
+    .agent-row-content .see-all:hover { color: var(--blue-bright); }
+    .agent-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .agent-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-dark);
       border-radius: 100px;
-      font-size: 10px;
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .agent-pill:hover {
+      border-color: var(--border-blue);
+      background: var(--blue-subtle);
+      transform: translateY(-1px);
+    }
+    .agent-pill .pill-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .agent-pill:hover .pill-arrow { color: var(--blue-bright); transform: translateX(2px); }
+    .feature-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      margin-left: 22px;
+      align-self: flex-start;
     }
-    .flow-badge.verified { background: rgba(0,196,140,0.1); color: #00c48c; }
-    .flow-badge.approved { background: rgba(26,102,255,0.1); color: #1a66ff; }
-    .flow-badge.compliant { background: rgba(168,85,247,0.1); color: #a855f7; }
-    .flow-badge.automated { background: rgba(234,179,8,0.1); color: #eab308; }
-
-    /* AGENT CARDS */
-    .agent-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .agent-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-dark);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .agent-card:hover {
-      border-color: var(--border-blue);
-      box-shadow: 0 4px 24px rgba(26, 102, 255, 0.08);
-      transform: translateY(-2px);
-    }
-    .agent-card h3 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--text-white);
-    }
-    .agent-card h3 .arrow {
-      color: var(--text-muted);
-      font-size: 16px;
-      transition: color 0.2s, transform 0.2s;
-    }
-    .agent-card:hover h3 .arrow { color: var(--blue-bright); transform: translateX(3px); }
-    .agent-tags {
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    .agent-tag {
-      padding: 2px 8px;
-      background: var(--blue-subtle);
-      color: var(--blue-light);
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .agent-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
+    .feature-badge.flow { background: rgba(0,196,140,0.1); color: #00c48c; }
+    .feature-badge.reasoning { background: rgba(26,102,255,0.1); color: #1a66ff; }
+    .feature-badge.tasks { background: rgba(234,179,8,0.1); color: #eab308; }
+    .feature-badge.output { background: rgba(168,85,247,0.1); color: #a855f7; }
     .explore-link {
       text-align: center;
-      margin-top: 24px;
+      margin-top: 32px;
     }
     .explore-link a {
       color: var(--blue-bright);
@@ -1001,7 +1012,9 @@
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-      .agents-layout { grid-template-columns: 1fr; }
+      .agent-row { grid-template-columns: 1fr; }
+      .agent-row.reverse .agent-row-screenshot { order: 0; }
+      .agent-row.reverse .agent-row-content { order: 0; }
       .integrations-grid { grid-template-columns: repeat(2, 1fr); }
       .pillars-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -1011,7 +1024,8 @@
       .stats-grid { grid-template-columns: 1fr; }
       .steps-row { grid-template-columns: 1fr; gap: 32px; }
       .steps-row::before { display: none; }
-      .agent-cards { grid-template-columns: 1fr; }
+      .agent-row-content { padding: 28px; }
+      .agent-row-screenshot { min-height: 200px; }
       .cases-grid { grid-template-columns: 1fr; }
       .integrations-grid { grid-template-columns: 1fr; }
       .pillars-grid { grid-template-columns: 1fr; }
@@ -1131,79 +1145,82 @@
       <h2>AI Agents in Banking and Finance</h2>
       <p>Automate and foster your banking services with a suite of AI agents. Easy to adopt, fast to integrate and supercharged with self-learning and automatic optimizations.</p>
     </div>
-    <div class="agents-layout">
-      <div class="flow-visual">
-        <div class="flow-area">
-          <div class="flow-area-top">
-            <span class="flow-area-icon">&#9889;</span>
-            <span class="flow-area-label">Risk</span>
-          </div>
-          <div class="flow-area-subs">KYC &middot; KYB &middot; Risk Monitoring &middot; Trade Finance</div>
-          <span class="flow-badge verified">Verified</span>
+    <div class="agent-rows">
+      <!-- Row 1: KYC (Flow) - Screenshot Left -->
+      <div class="agent-row">
+        <div class="agent-row-screenshot">
+          <div class="screenshot-placeholder">Product screenshot: KYC agent workflow in Beam</div>
         </div>
-        <div class="flow-area">
-          <div class="flow-area-top">
-            <span class="flow-area-icon">&#128203;</span>
-            <span class="flow-area-label">Credit</span>
+        <div class="agent-row-content">
+          <h3>KYC</h3>
+          <p class="row-desc">Automate identity verification, risk scoring, and due diligence across retail and corporate clients.</p>
+          <a href="https://beam.ai/ai-agents" class="see-all">See all Banking Agents &rarr;</a>
+          <div class="agent-pills">
+            <a href="https://beam.ai/agents/kyc-aml-compliance-ai-agent" class="agent-pill">KYC Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/sanctions-screening-agent" class="agent-pill">Sanctions Screening Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/kyc-renewal-ai-agent" class="agent-pill">KYC Renewal Agent <span class="pill-arrow">&rarr;</span></a>
           </div>
-          <div class="flow-area-subs">Underwriting &middot; SME Lending &middot; Mortgages &middot; Consumer</div>
-          <span class="flow-badge approved">Approved</span>
-        </div>
-        <div class="flow-area">
-          <div class="flow-area-top">
-            <span class="flow-area-icon">&#128274;</span>
-            <span class="flow-area-label">Compliance</span>
-          </div>
-          <div class="flow-area-subs">Case Management &middot; Regulatory Updates</div>
-          <span class="flow-badge compliant">Compliant</span>
-        </div>
-        <div class="flow-area">
-          <div class="flow-area-top">
-            <span class="flow-area-icon">&#128260;</span>
-            <span class="flow-area-label">Service</span>
-          </div>
-          <div class="flow-area-subs">Account Opening &middot; Backend &middot; Personal Finance</div>
-          <span class="flow-badge automated">Automated</span>
+          <span class="feature-badge flow">Flow</span>
         </div>
       </div>
 
-      <div>
-        <div class="agent-cards">
-          <a href="https://beam.ai/agents/know-your-customer-kyc-agent" class="agent-card">
-            <h3>KYC Agent <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">KYC</span><span class="agent-tag">KYB</span><span class="agent-tag">Risk Scoring</span></div>
-            <p>Verifies identity and assigns risk scores per regulatory requirements.</p>
-          </a>
-          <a href="https://beam.ai/agents/sanctions-screening-agent" class="agent-card">
-            <h3>Sanctions Screening <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">OFAC</span><span class="agent-tag">Sanctions</span></div>
-            <p>Screens against global sanctions lists in real time.</p>
-          </a>
-          <a href="https://beam.ai/agents/loan-processing-agent" class="agent-card">
-            <h3>Loan Processing <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">Origination</span><span class="agent-tag">Underwriting</span></div>
-            <p>Automates loan origination end to end.</p>
-          </a>
-          <a href="https://beam.ai/agents/accounts-reconciliation-ai-agent" class="agent-card">
-            <h3>Accounts Reconciliation <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">Matching</span><span class="agent-tag">Exceptions</span></div>
-            <p>Reconciles accounts across systems and flags exceptions.</p>
-          </a>
-          <a href="https://beam.ai/agents/transaction-monitoring-assistant" class="agent-card">
-            <h3>Transaction Monitoring <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">Pattern Det.</span><span class="agent-tag">Anomaly</span></div>
-            <p>Monitors for structuring and layering with fewer false positives.</p>
-          </a>
-          <a href="https://beam.ai/agents/compliance-monitoring-agent" class="agent-card">
-            <h3>Compliance Monitoring <span class="arrow">&rarr;</span></h3>
-            <div class="agent-tags"><span class="agent-tag">Reg. Updates</span><span class="agent-tag">Case Mgmt</span></div>
-            <p>Tracks regulatory changes and manages compliance cases.</p>
-          </a>
+      <!-- Row 2: SME Lending (Reasoning) - Screenshot Right -->
+      <div class="agent-row reverse">
+        <div class="agent-row-screenshot">
+          <div class="screenshot-placeholder">Product screenshot: lending agent workflow in Beam</div>
         </div>
-        <div class="explore-link">
-          <a href="https://beam.ai/ai-agents">Explore all banking agents &rarr;</a>
+        <div class="agent-row-content">
+          <h3>SME Lending</h3>
+          <p class="row-desc">Streamline loan origination, underwriting, and credit decisions for SME and consumer portfolios.</p>
+          <a href="https://beam.ai/ai-agents" class="see-all">See all Banking Agents &rarr;</a>
+          <div class="agent-pills">
+            <a href="https://beam.ai/agents/loan-processing-agent" class="agent-pill">Loan Processing Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/trade-finance-ai-agent" class="agent-pill">Trade Finance Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/financial-compliance-and-reporting-ai-agent" class="agent-pill">Financial Compliance Agent <span class="pill-arrow">&rarr;</span></a>
+          </div>
+          <span class="feature-badge reasoning">Reasoning</span>
         </div>
       </div>
+
+      <!-- Row 3: Backoffice (Tasks) - Screenshot Left -->
+      <div class="agent-row">
+        <div class="agent-row-screenshot">
+          <div class="screenshot-placeholder">Product screenshot: backoffice agent workflow in Beam</div>
+        </div>
+        <div class="agent-row-content">
+          <h3>Backoffice</h3>
+          <p class="row-desc">Automate reconciliation, account servicing, and document processing across operations.</p>
+          <a href="https://beam.ai/ai-agents" class="see-all">See all Banking Agents &rarr;</a>
+          <div class="agent-pills">
+            <a href="https://beam.ai/agents/accounts-reconciliation-ai-agent" class="agent-pill">Accounts Reconciliation Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/bank-reconciliation-agent" class="agent-pill">Bank Reconciliation Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/document-classification-ai-agent" class="agent-pill">Document Classification Agent <span class="pill-arrow">&rarr;</span></a>
+          </div>
+          <span class="feature-badge tasks">Tasks</span>
+        </div>
+      </div>
+
+      <!-- Row 4: Regulatory Updates (Output) - Screenshot Right -->
+      <div class="agent-row reverse">
+        <div class="agent-row-screenshot">
+          <div class="screenshot-placeholder">Product screenshot: compliance agent workflow in Beam</div>
+        </div>
+        <div class="agent-row-content">
+          <h3>Regulatory Updates</h3>
+          <p class="row-desc">Track regulatory changes, manage compliance cases, and generate examiner-ready reports automatically.</p>
+          <a href="https://beam.ai/ai-agents" class="see-all">See all Banking Agents &rarr;</a>
+          <div class="agent-pills">
+            <a href="https://beam.ai/agents/transaction-monitoring-ai-agent" class="agent-pill">Transaction Monitoring Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/suspicious-activity-reporting-ai-agent" class="agent-pill">SAR Agent <span class="pill-arrow">&rarr;</span></a>
+            <a href="https://beam.ai/agents/compliance-monitoring-agent" class="agent-pill">Compliance Monitoring Agent <span class="pill-arrow">&rarr;</span></a>
+          </div>
+          <span class="feature-badge output">Output</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="explore-link">
+      <a href="https://beam.ai/ai-agents">Explore all banking agents &rarr;</a>
     </div>
   </div>
 </section>
