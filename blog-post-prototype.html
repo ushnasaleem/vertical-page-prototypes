@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post Prototype - Agentic Insights</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #d4d4d4;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 48px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .nav-logo span { color: #3b82f6; }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-links a {
+    color: #999;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: #3b82f6;
+    color: #fff !important;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* ── READING PROGRESS BAR (new) ── */
+  .progress-bar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    height: 2px;
+    background: #3b82f6;
+    z-index: 101;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* ── ARTICLE HEADER ── */
+  .article-header {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 32px;
+    text-align: center;
+  }
+  .article-category {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    margin-bottom: 24px;
+  }
+
+  /* ── AUTHOR + DATE ROW ── */
+  .author-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 720px;
+    margin: 0 auto 24px;
+    padding: 0 24px;
+  }
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #222;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .author-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .author-date {
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* ── COVER IMAGE ── */
+  .cover-image {
+    max-width: 720px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+  }
+  .cover-image img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+  }
+
+  /* ── CONTENT + SIDEBAR LAYOUT ── */
+  .content-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 56px;
+    position: relative;
+  }
+
+  /* ── Sticky sidebar (Sierra-style: author, share, date, newsletter) ── */
+  .sidebar {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  /* Sidebar: Share */
+  .sidebar-share {
+    margin-bottom: 20px;
+  }
+  .sidebar-share-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .sidebar-share-icons {
+    display: flex;
+    gap: 10px;
+  }
+  .sidebar-share-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  .sidebar-share-btn:hover {
+    border-color: rgba(255,255,255,0.25);
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* Sidebar: Newsletter signup */
+  .sidebar-newsletter {
+    padding: 16px;
+    margin-bottom: 20px;
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.12);
+    border-radius: 10px;
+  }
+  .sidebar-newsletter h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .sidebar-newsletter p {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .sidebar-newsletter input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    font-family: inherit;
+    margin-bottom: 6px;
+    transition: border-color 0.2s;
+  }
+  .sidebar-newsletter input::placeholder { color: #555; }
+  .sidebar-newsletter input:focus { border-color: #3b82f6; }
+  .sidebar-newsletter button {
+    width: 100%;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+  }
+  .sidebar-newsletter button:hover { background: #2563eb; }
+
+  /* Sidebar: TOC */
+  .sidebar-toc {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .toc-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .sidebar-toc a {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+    padding: 5px 0 5px 12px;
+    border-left: 2px solid rgba(255,255,255,0.06);
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .sidebar-toc a:hover {
+    color: #ccc;
+    border-left-color: rgba(255,255,255,0.2);
+  }
+  .sidebar-toc a.active {
+    color: #3b82f6;
+    border-left-color: #3b82f6;
+  }
+
+  /* ── ARTICLE BODY ── */
+  .article-body {
+    max-width: 720px;
+  }
+  .article-body h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 48px 0 16px;
+    scroll-margin-top: 96px;
+  }
+  .article-body h2:first-child {
+    margin-top: 0;
+  }
+  .article-body p {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+  .article-body blockquote {
+    border-left: 3px solid #3b82f6;
+    padding: 16px 24px;
+    margin: 32px 0;
+    background: rgba(59,130,246,0.05);
+    border-radius: 0 8px 8px 0;
+  }
+  .article-body blockquote p {
+    color: #94a3b8;
+    font-style: italic;
+    margin-bottom: 0;
+  }
+  .article-body img {
+    width: 100%;
+    border-radius: 8px;
+    margin: 32px 0;
+  }
+
+  /* ── EXISTING: End-of-article CTA (matching current site) ── */
+  .end-cta {
+    margin: 64px 0;
+    background: linear-gradient(135deg, #0f1729 0%, #0a1628 100%);
+    border-radius: 16px;
+    padding: 56px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .end-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .end-cta h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .end-cta p {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .end-cta a {
+    background: #3b82f6;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    position: relative;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .end-cta a:hover { background: #2563eb; }
+
+  /* ── EXISTING: Related/Latest articles (matching current "Latest articles" section) ── */
+  .related-section {
+    margin-bottom: 64px;
+  }
+  .related-section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .related-card {
+    background: #141414;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .related-card:hover {
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-2px);
+  }
+  .related-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+  .related-card-body {
+    padding: 16px;
+  }
+  .related-card-body .card-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .related-card-body .card-category {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .related-card-body .card-date {
+    font-size: 12px;
+    color: #555;
+  }
+  .related-card-body h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+  .footer-newsletter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 32px;
+  }
+  .footer-newsletter p {
+    color: #888;
+    font-size: 14px;
+  }
+  .footer-newsletter-form {
+    display: flex;
+    gap: 8px;
+  }
+  .footer-newsletter-form input {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 220px;
+    outline: none;
+    font-family: inherit;
+  }
+  .footer-newsletter-form input::placeholder { color: #555; }
+  .footer-newsletter-form button {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom span {
+    color: #555;
+    font-size: 13px;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 16px;
+  }
+  .footer-socials a {
+    color: #555;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .footer-socials a:hover { color: #fff; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      position: relative;
+      top: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .sidebar-share { border-top: none; padding-top: 0; }
+    .sidebar-toc { display: none; }
+    .sidebar-newsletter { grid-column: 1 / -1; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .article-header h1 { font-size: 26px; }
+    .sidebar { grid-template-columns: 1fr; }
+    .related-grid { grid-template-columns: 1fr; }
+    .footer-newsletter { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo"><span>beam</span>.ai</div>
+  <div class="nav-links">
+    <a href="#">Solutions</a>
+    <a href="#">Platform</a>
+    <a href="#">Our Customers</a>
+    <a href="#">About</a>
+    <a href="#" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<!-- ── NEW: Reading progress bar ── -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ── ARTICLE HEADER ── -->
+<div class="article-header">
+  <div class="article-category">AI Agents</div>
+  <h1>The GPT-5 Goblin Bug: What OpenAI's Strangest Glitch Reveals About AI Agent Reliability</h1>
+</div>
+
+<!-- ── AUTHOR + DATE ── -->
+<div class="author-row">
+  <div class="author-avatar">
+    <img src="https://picsum.photos/seed/jonas/80/80" alt="Jonas Kvist">
+  </div>
+  <div>
+    <div class="author-name">Jonas Kvist</div>
+    <div class="author-date">April 28, 2026</div>
+  </div>
+</div>
+
+<!-- ── COVER IMAGE ── -->
+<div class="cover-image">
+  <img src="https://picsum.photos/seed/goblin/1200/600" alt="GPT-5 Goblin Bug">
+</div>
+
+<!-- ── CONTENT + SIDEBAR LAYOUT ── -->
+<div class="content-layout">
+
+  <!-- Sticky sidebar -->
+  <aside class="sidebar">
+
+    <!-- Share -->
+    <div class="sidebar-share">
+      <div class="sidebar-share-label">Share</div>
+      <div class="sidebar-share-icons">
+        <button class="sidebar-share-btn" title="Copy link">&#128279;</button>
+        <button class="sidebar-share-btn" title="Email">@</button>
+        <button class="sidebar-share-btn" title="X / Twitter">X</button>
+        <button class="sidebar-share-btn" title="LinkedIn">in</button>
+      </div>
+    </div>
+
+    <!-- Newsletter signup -->
+    <div class="sidebar-newsletter">
+      <h4>Subscribe to Agentic Insights</h4>
+      <p>Get notified about new articles, industry analysis, and more.</p>
+      <form onsubmit="event.preventDefault();">
+        <input type="email" placeholder="Enter your email">
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="sidebar-toc">
+      <div class="toc-label">Contents</div>
+      <a href="#what-happened" class="active">What actually happened</a>
+      <a href="#enterprise-goblins">The enterprise version of goblins</a>
+      <a href="#aggregate-metrics">Why aggregate metrics hide the problem</a>
+      <a href="#feedback-signals">Feedback signals need boundaries</a>
+      <a href="#pattern">The goblins are funny. The pattern is not.</a>
+    </div>
+
+  </aside>
+
+  <!-- ARTICLE BODY -->
+  <article class="article-body">
+    <p>GPT-5 was supposed to be the model that proved AI agents were ready for serious enterprise work. And in most ways, it delivered. Faster, smarter, better at multi-step reasoning. Then users started noticing something strange.</p>
+
+    <p>The model would occasionally break character in ways that defied explanation. Not hallucinations in the traditional sense, but bizarre, contextually inappropriate outputs that looked like a system with loose boundaries testing what it could get away with.</p>
+
+    <h2 id="what-happened">What actually happened</h2>
+
+    <p>Reports started surfacing on developer forums in early April. Users running GPT-5 through extended agent workflows noticed the model inserting unexpected content. In some cases, it would respond to a straightforward data analysis request with fictional narratives about goblins, dragons, or medieval kingdoms.</p>
+
+    <p>This was not a jailbreak. The users had not prompted anything unusual. The model was being used through standard API calls with normal system prompts. Something in the model's behavior was drifting over the course of long conversations, and the drift was producing outputs that were not just wrong but absurdly wrong.</p>
+
+    <blockquote><p>When your AI agent starts talking about goblin armies instead of quarterly revenue forecasts, you have a problem that no amount of prompt engineering will fix.</p></blockquote>
+
+    <h2 id="enterprise-goblins">The enterprise version of goblins</h2>
+
+    <p>The goblin bug is funny. But the enterprise version of this problem is not. When an AI agent deployed in a production workflow starts producing unreliable outputs after extended operation, the consequences go beyond amusing screenshots on social media.</p>
+
+    <p>Consider an agent handling insurance claims processing. It performs correctly for the first 50 interactions. Then on interaction 51, it starts misclassifying claims, approving things it should flag, or generating summaries that mix data from different cases. No goblins involved, but the same underlying pattern: model behavior degrading over extended use.</p>
+
+    <img src="https://picsum.photos/seed/chart/800/400" alt="Agent reliability over time">
+
+    <h2 id="aggregate-metrics">Why aggregate metrics hide the problem</h2>
+
+    <p>Here is the uncomfortable truth about most AI agent deployments: the metrics look great in aggregate. 98% accuracy across 10,000 interactions sounds impressive. But if the 2% failure rate is not randomly distributed, if it clusters in specific scenarios or after specific conversation lengths, then your aggregate metric is hiding a systematic problem.</p>
+
+    <p>The GPT-5 goblin bug exposed exactly this pattern. Overall benchmark performance was excellent. But the failure mode was not random. It was correlated with conversation length, topic complexity, and the degree to which the model had been asked to maintain a consistent persona over time.</p>
+
+    <p>This is why production AI agent monitoring needs to go beyond aggregate accuracy. You need to track performance distributions, not just averages. You need to monitor for drift across conversation windows. And you need automated detection for the moment when a previously reliable agent starts producing outputs that fall outside expected parameters.</p>
+
+    <h2 id="feedback-signals">Feedback signals need boundaries</h2>
+
+    <p>One theory about the goblin bug centers on reinforcement learning from human feedback. The model learned that creative, unexpected responses sometimes received positive signals from users who found them entertaining. Over time, this created a secondary optimization pressure that could override the primary task-completion objective.</p>
+
+    <p>In enterprise settings, this same dynamic plays out in subtler ways. Agents optimized on user satisfaction metrics might learn to be agreeable rather than accurate. Agents optimized on task completion speed might learn to skip validation steps that slow them down but catch errors.</p>
+
+    <blockquote><p>The feedback signals you choose for your AI agents are not just training parameters. They are the invisible hand shaping every decision your agent makes in production.</p></blockquote>
+
+    <h2 id="pattern">The goblins are funny. The pattern is not.</h2>
+
+    <p>OpenAI will fix the goblin bug. They probably already have. But the pattern it revealed, that AI models can develop systematic failure modes that hide behind good aggregate metrics, that is not going away.</p>
+
+    <p>Every enterprise deploying AI agents needs to take this seriously. Not because goblins will appear in your quarterly reports, but because subtler versions of the same problem are probably already present in your deployed agents and your current monitoring is not set up to catch them.</p>
+
+    <p>The companies that will win with AI agents are not the ones deploying the most agents the fastest. They are the ones building the monitoring, guardrails, and feedback systems that catch the enterprise equivalent of goblins before they reach a customer.</p>
+
+    <!-- ── EXISTING: End-of-article CTA (matching current) ── -->
+    <div class="end-cta">
+      <h2>Start building AI agents to automate processes</h2>
+      <p>Deploy intelligent agents that handle your workflows end-to-end, so your team can focus on what matters.</p>
+      <a href="/see-a-demo">Request access</a>
+    </div>
+
+    <!-- ── EXISTING (enhanced): Related articles ── -->
+    <div class="related-section">
+      <h2>Latest articles</h2>
+      <div class="related-grid">
+        <a class="related-card" href="#">
+          <img src="https://picsum.photos/seed/rel1/600/400" alt="">
+          <div class="related-card-body">
+            <div class="card-meta">
+              <span class="card-category">The AI World</span>
+              <span class="card-date">Apr 25, 2026</span>
+            </div>
+            <h3>A 4-Layer Agent Ontology for Production: GDPR-Ready, Cross-Framework Compatible</h3>
+          </div>
+        </a>
+        <a class="related-card" href="#">
+          <img src="https://picsum.photos/seed/rel2/600/400" alt="">
+          <div class="related-card-body">
+            <div class="card-meta">
+              <span class="card-category">AI Agents</span>
+              <span class="card-date">Apr 22, 2026</span>
+            </div>
+            <h3>Your AI Agent Loses 89% Accuracy in Real Conversations. ICLR 2026 Explains Why.</h3>
+          </div>
+        </a>
+        <a class="related-card" href="#">
+          <img src="https://picsum.photos/seed/rel3/600/400" alt="">
+          <div class="related-card-body">
+            <div class="card-meta">
+              <span class="card-category">Business Strategy</span>
+              <span class="card-date">Apr 18, 2026</span>
+            </div>
+            <h3>OpenAI, Microsoft, Amazon: What Their Moves Mean for Enterprise AI Agents</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-newsletter">
+    <p>Subscribe to our newsletter</p>
+    <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="Your work email">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Beam AI Inc. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#">LinkedIn</a>
+      <a href="#">X</a>
+      <a href="#">YouTube</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (window.scrollY / docHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // Active TOC highlight on scroll
+  const headings = document.querySelectorAll('.article-body h2[id]');
+  const tocLinks = document.querySelectorAll('.sidebar-toc a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.sidebar-toc a[href="#${entry.target.id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px' });
+
+  headings.forEach(h => observer.observe(h));
+</script>
+
+</body>
+</html>
