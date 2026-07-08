@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q3 Thinking Map — Beam Inbound</title>
+<style>
+  :root{
+    --ink:#1a1a2e; --muted:#6b6b80; --line:#e3e3ec;
+    --violet:#5b4bdb; --violet-soft:#eeecfb;
+    --teal:#0f9b8e; --teal-soft:#e6f6f4;
+    --amber:#d98324; --amber-soft:#fbf1e4;
+    --rose:#d6455f; --rose-soft:#fbe9ed;
+    --bg:#fafafc;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:48px 32px 72px}
+  h1{font-size:30px;margin:0 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:16px;margin:0 0 4px}
+  .tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--violet);background:var(--violet-soft);padding:4px 10px;border-radius:20px;margin-bottom:18px}
+  h2{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    margin:44px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .premise{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 24px;
+    box-shadow:0 1px 3px rgba(20,20,50,.04)}
+  .premise b{color:var(--violet)}
+  .premise p{margin:0 0 10px}
+  .premise p:last-child{margin:0}
+
+  /* SPINE */
+  .spine{display:flex;flex-wrap:wrap;gap:0;align-items:stretch}
+  .node{flex:1 1 0;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 16px 18px;position:relative;box-shadow:0 1px 3px rgba(20,20,50,.05)}
+  .node .n{font-size:12px;font-weight:700;color:#fff;width:22px;height:22px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .node h3{margin:0 0 3px;font-size:15px;letter-spacing:-.01em}
+  .node .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}
+  .node p{margin:0;font-size:12.5px;color:#43435a}
+  .arrow{flex:0 0 34px;display:flex;align-items:center;justify-content:center;color:#c3c3d4;font-size:22px}
+  .c1 .n{background:var(--rose)} .c1{border-top:3px solid var(--rose)}
+  .c2 .n{background:var(--violet)} .c2{border-top:3px solid var(--violet)}
+  .c3 .n{background:var(--teal)} .c3{border-top:3px solid var(--teal)}
+  .c4 .n{background:var(--amber)} .c4{border-top:3px solid var(--amber)}
+  .c5 .n{background:#3a7bd5} .c5{border-top:3px solid #3a7bd5}
+  .c6 .n{background:#1a1a2e} .c6{border-top:3px solid #1a1a2e}
+  .loop{margin-top:14px;font-size:12.5px;color:var(--muted);text-align:center;font-style:italic}
+  .loop b{color:var(--teal);font-style:normal}
+
+  /* TIMELINE */
+  .months{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .month{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;box-shadow:0 1px 3px rgba(20,20,50,.04)}
+  .month .mh{font-size:15px;font-weight:700;margin-bottom:2px}
+  .month .mt{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .month ul{margin:0;padding:0;list-style:none}
+  .month li{font-size:12.5px;padding:6px 0 6px 20px;position:relative;border-top:1px dashed var(--line)}
+  .month li:first-child{border-top:none}
+  .month li::before{content:"";position:absolute;left:2px;top:12px;width:7px;height:7px;border-radius:50%;background:var(--violet)}
+  .month li.star::before{background:var(--rose);box-shadow:0 0 0 3px var(--rose-soft)}
+  .m1{border-top:3px solid var(--rose)} .m2{border-top:3px solid var(--amber)} .m3{border-top:3px solid var(--teal)}
+  .rule{margin-top:14px;font-size:12.5px;color:#43435a;background:var(--amber-soft);border-radius:10px;padding:10px 14px}
+  .rule b{color:var(--amber)}
+
+  /* TRACKS + PAYOFF */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:720px){.split{grid-template-columns:1fr}.months{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 3px rgba(20,20,50,.04)}
+  .card h4{margin:0 0 12px;font-size:14px}
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+  .pill{background:var(--violet-soft);color:var(--violet);font-weight:600;padding:5px 12px;border-radius:20px;white-space:nowrap}
+  .pill.b{background:var(--teal-soft);color:var(--teal)}
+  .go{color:#c3c3d4}
+  .kpi{display:flex;gap:22px;flex-wrap:wrap}
+  .kpi div{flex:1 1 120px}
+  .kpi .big{font-size:22px;font-weight:700;letter-spacing:-.02em}
+  .kpi .big .to{color:var(--teal)}
+  .kpi .cap{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .foot{margin-top:36px;font-size:12px;color:var(--muted);text-align:center}
+  .legend{margin-top:8px;font-size:12px;color:var(--muted)}
+  .legend .s{color:var(--rose);font-weight:700}
+
+  /* FLOWS PORTFOLIO */
+  .flows{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:4px}
+  @media(max-width:720px){.flows{grid-template-columns:1fr}}
+  .flow-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    box-shadow:0 1px 3px rgba(20,20,50,.04);border-left:4px solid var(--violet)}
+  .flow-card.lt{border-left-color:var(--teal)}
+  .fh{font-size:13.5px;font-weight:700;margin-bottom:5px}
+  .fh .ft{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--violet);
+    background:var(--violet-soft);padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
+  .flow-card.lt .fh .ft{color:var(--teal);background:var(--teal-soft)}
+  .fdesc{font-size:12px;color:#43435a;margin-bottom:8px}
+  .fimpact{font-size:11.5px;color:#43435a;background:var(--violet-soft);border-radius:8px;padding:6px 10px}
+  .flow-card.lt .fimpact{background:var(--teal-soft)}
+  .fimpact b{color:var(--ink)}
+  .ft-h{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="tag">Q3 2026 · Inbound · Beam</span>
+  <h1>How the quarter fits together</h1>
+  <p class="sub">One system, built in sequence — each asset exists to make the next one work.</p>
+
+  <h2>The premise — why we're doing any of this</h2>
+  <div class="premise">
+    <p>RPO &amp; BPO buyers are squeezed on <b>margin</b>. Beam's whole pitch is operating leverage — the same team handling far more volume. So we lead with the margin story and <b>narrow to RPO (CV-screening) first</b>.</p>
+    <p>But today the only way in is <b>"book a demo"</b> — too steep for someone not ready. The fix: <b>value-based off-ramps</b> (a white paper, an ROI calculator) that give something useful <i>before</i> we ask for the meeting, and earn trust on the way.</p>
+  </div>
+
+  <h2>The spine — how one thing leads into the next</h2>
+  <div class="spine">
+    <div class="node c1"><div class="n">1</div><div class="lbl">Proof</div><h3>Case studies</h3><p>You can't claim margin gains without receipts. Booth (RPO) + Americana (BPO) are banked, with testimonial videos we repurpose. Hudson/Favorite are upside.</p></div>
+    <div class="arrow">→</div>
+    <div class="node c2"><div class="n">2</div><div class="lbl">The keystone</div><h3>White paper</h3><p>A fast process-discovery paper: the cost of AI experimentation + a Beam case study + a fitness test. Reads like research, not a sell. Harris drafts it in days.</p></div>
+    <div class="arrow">→</div>
+    <div class="node c3"><div class="n">3</div><div class="lbl">Personalize</div><h3>ROI calculator</h3><p>The paper's fitness test funnels readers here. The buyer sees <i>their own</i> number. v1 is built — needs tuning + hosting.</p></div>
+    <div class="arrow">→</div>
+    <div class="node c4"><div class="n">4</div><div class="lbl">Distribute</div><h3>Promotion</h3><p>Gate both assets (email) → LinkedIn ads (white papers = the best-performing format) + founder posts + a process-discovery webinar. Video winds down.</p></div>
+    <div class="arrow">→</div>
+    <div class="node c5"><div class="n">5</div><div class="lbl">Capture</div><h3>Email nurture</h3><p>Nurture turns the captured interest into booked meetings — the part most programs skip.</p></div>
+    <div class="arrow">→</div>
+    <div class="node c6"><div class="n">6</div><div class="lbl">Outcome</div><h3>Meetings</h3><p>Qualified, intent-rich meetings handed to sales — and proof unlocks the ABM lane.</p></div>
+  </div>
+  <p class="loop">↻ &nbsp;<b>The flywheel:</b> calculator inputs + new customer wins feed the next white paper + refreshes — the system refills itself.</p>
+
+  <h2>The flows we're running this quarter — and the impact we expect</h2>
+  <p class="sub" style="margin-bottom:14px">Baseline ≈222 leads / 54 mtgs per month → ≈302–415 leads / 78–105 mtgs by end of September. Each flow, and what it's estimated to add:</p>
+
+  <div class="ft-h">Short-term — running this quarter</div>
+  <div class="flows">
+    <div class="flow-card"><div class="fh">White paper + ROI calculator<span class="ft">keystone</span></div><div class="fdesc">Process-discovery paper → fitness test → calculator → email capture → nurture.</div><div class="fimpact"><b>+20–45 leads/mo · +5–11 mtgs/mo</b> at full run (calculator converts ~9–12%). $0 to build · ~$3–5k ads · live Aug–Sept.</div></div>
+    <div class="flow-card"><div class="fh">Lost-lead email nurture<span class="ft">~184 leads</span></div><div class="fdesc">Closed-lost + Fillout leads → a 3-email Jaye-voice sequence → booked meetings.</div><div class="fimpact"><b>+3–8 leads/mo · +1–2 mtgs/mo</b> (warm). $0 (Loops) · live from July. The calculator becomes the hook once live.</div></div>
+    <div class="flow-card"><div class="fh">Review-platform presence<span class="ft">credibility</span></div><div class="fdesc">Ask 10–15 customers → G2 / Capterra / Gartner reviews → trust + AEO citations.</div><div class="fimpact"><b>+0–3 leads/mo (high-intent)</b> + a trust lift + LLM visibility. ≥10 reviews unlocks a featured tier. $0 · live from July.</div></div>
+    <div class="flow-card"><div class="fh">Product launches<span class="ft">awareness</span></div><div class="fdesc">Product Hunt + AI directories ("There's An AI For That") + new-agent / process-discovery launches.</div><div class="fimpact"><b>+5–15 signups (mostly non-ICP) · +0–3 ICP mtgs.</b> Score demo→meeting, not upvotes. $0–300 · August.</div></div>
+    <div class="flow-card"><div class="fh">RPO / BPO case studies<span class="ft">enabler</span></div><div class="fdesc">Booth (RPO) + Americana (BPO) testimonials → feed the white paper + unlock the ABM gate.</div><div class="fimpact"><b>Enabler — unlocks LinkedIn ABM (+30–50 leads/mo if approved) + a ~10–20% conversion lift</b> across paid + nurture. ~$1–2k · Jul–Sept.</div></div>
+  </div>
+
+  <div class="ft-h">Long-term — compounding beyond Q3</div>
+  <div class="flows">
+    <div class="flow-card lt"><div class="fh">SEO / AEO / blogs<span class="ft">the durable bet</span></div><div class="fdesc">2–4 BOFU posts/mo + title/CTR fixes + getting onto G2 / Reddit / Gartner → organic + LLM citations.</div><div class="fimpact"><b>+10–25 leads/mo, growing · +5–7 mtgs/mo</b> (28% convert). A 4–9 month compounding play, not a Q3 quick hit. $0 (+$109–199 tool).</div></div>
+    <div class="flow-card lt"><div class="fh">Founder LinkedIn<span class="ft">high trust</span></div><div class="fdesc">Jonas + founders drip the white paper's stats, one per post.</div><div class="fimpact"><b>+0–3 leads/mo · high trust · $0.</b> Only compounds if founders actually drive it.</div></div>
+  </div>
+
+  <h2>The sequence — the white paper moves fast; only clearances are slow</h2>
+  <div class="months">
+    <div class="month m1">
+      <div class="mh">July · Foundation</div>
+      <div class="mt">Restructure paid, turn on the free lanes, draft the white paper</div>
+      <ul>
+        <li class="star">Draft the process-discovery white paper (Harris, from Jul 9)</li>
+        <li>Repurpose Booth + Americana testimonial videos; chase Hudson/Favorite clearance</li>
+        <li>Tune + host the ROI calculator v1 (in-house, $0)</li>
+        <li>SEO/AEO push · lost-lead nurture on · G2 reviews · cut dead paid</li>
+      </ul>
+    </div>
+    <div class="month m2">
+      <div class="mh">August · Activation</div>
+      <div class="mt">Launch the calculator + publish the white paper</div>
+      <ul>
+        <li class="star">Launch the ROI calculator + publish the white paper (gated)</li>
+        <li>Wire the fitness test → calculator; publish Booth deep-dive</li>
+        <li>Product Hunt one-time awareness test</li>
+        <li>SEO/AEO + nurture + reviews compounding</li>
+      </ul>
+    </div>
+    <div class="month m3">
+      <div class="mh">September · Scale</div>
+      <div class="mt">Promote + scale; open the gated lanes</div>
+      <ul>
+        <li class="star">Promote the white paper on LinkedIn (gated, email capture)</li>
+        <li>Process-discovery webinar series (Harris + Jay)</li>
+        <li class="star">Case studies live → unlock LinkedIn ABM decision</li>
+        <li>Calculator footnoted to the white paper</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rule"><b>The rule:</b> the white paper is now the fast keystone (Harris drafts it in days). The one long pole left is named case-study clearance (6–12 wks) — so we repurpose the already-cleared Booth + Americana videos, and nothing waits on a slow "yes."</div>
+
+  <h2>The two tracks &amp; the payoff</h2>
+  <div class="split">
+    <div class="card">
+      <h4>RPO + BPO together, via existing videos</h4>
+      <div class="flow">
+        <span class="pill">RPO · Booth video</span>
+        <span class="go">+</span>
+        <span class="pill b">BPO · Americana video</span>
+        <span class="go">→</span>
+        <span class="pill">Both in the white paper</span>
+      </div>
+      <p style="font-size:12.5px;color:#43435a;margin:14px 0 0">Both Booth (RPO) and Americana (BPO) are name-cleared and already have testimonial videos — so the white paper uses both now, no waiting. Americana is framed as back-office automation, not "a BPO customer."</p>
+    </div>
+    <div class="card">
+      <h4>Where it moves the number</h4>
+      <div class="kpi">
+        <div><div class="big">≈222<span class="to"> → 302–415</span></div><div class="cap">Leads / mo</div></div>
+        <div><div class="big">≈54<span class="to"> → 78–105</span></div><div class="cap">Meetings / mo</div></div>
+      </div>
+      <p style="font-size:12.5px;color:#43435a;margin:14px 0 0">Baseline → end of September. Plus a compounding asset base, AEO citations, and the ABM lane unlocked. The white paper ships fast, so its leads land sooner; SEO/AEO is the durable Q4+ bet.</p>
+    </div>
+  </div>
+
+  <h2>Can two people do this?</h2>
+  <div class="card" style="border-top:3px solid var(--violet);margin-bottom:16px">
+    <p style="margin:0;font-size:14px"><b>Short answer:</b> a 2-person team can ship the <b style="color:var(--teal)">spine</b> — white paper, Booth case study, calculator, nurture, lean paid. It <b>cannot</b> also run the full channel plan at full cadence. With no extra support, keep the compounding lines, cut the volume + experiments, and buy time with freelance production.</p>
+  </div>
+  <div class="split">
+    <div class="card" style="border-top:3px solid var(--teal)">
+      <h4 style="color:var(--teal)">✓ Protect — the critical path</h4>
+      <ul style="margin:0;padding-left:20px;font-size:12.5px;color:#43435a">
+        <li style="padding:4px 0"><b>White paper</b> — the fast flagship (process discovery; Harris drafts it)</li>
+        <li style="padding:4px 0"><b>Booth case study + Hudson clearance</b> — unlocks ABM</li>
+        <li style="padding:4px 0"><b>ROI calculator</b> — in-house dev builds it; best converter</li>
+        <li style="padding:4px 0"><b>Email nurture</b> — already built, fast, high ROI</li>
+        <li style="padding:4px 0"><b>Paid restructure + SEO/AEO quick fixes</b> — cheap, high value</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--amber)">
+      <h4 style="color:var(--amber)">✕ Cut / defer — if no extra support</h4>
+      <ul style="margin:0;padding-left:20px;font-size:12.5px;color:#6b6b80">
+        <li style="padding:4px 0"><b>Blog 8/mo → 2–4/mo</b>, BOFU-only (organic isn't a Q3 lead source anyway)</li>
+        <li style="padding:4px 0"><b>Webinars</b> → defer to Q4 (or one lean co-host)</li>
+        <li style="padding:4px 0"><b>Product Hunt one-time</b> → cut (low-ICP audience)</li>
+        <li style="padding:4px 0"><b>New RPO reference</b> → defer; Booth is enough anchor</li>
+        <li style="padding:4px 0"><b>Founder LinkedIn cadence</b> → only if Jonas drives it</li>
+        <li style="padding:4px 0"><b>BPO expansion</b> → already after the calculator (naturally later)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h4>The 2-person split + who offloads</h4>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:12.5px;color:#43435a">
+      <div><span class="pill" style="margin-right:8px">Person 1 · Ushna</span> strategy · white-paper research + sourcing · case-study coordination · calculator spec · nurture</div>
+      <div><span class="pill b" style="margin-right:8px">Person 2 · Vivien (paid)</span> LinkedIn · Search · retargeting · webinar setup</div>
+      <div><span class="pill" style="margin-right:8px;background:#f2f2f8;color:#6b6b80">Offloaded</span> Harris builds the white paper · clearance group (Harris / Derya / Christian) runs approvals · founders feed case-study quotes + LinkedIn · in-house dev builds the calculator</div>
+    </div>
+    <p style="font-size:12.5px;color:#43435a;margin:14px 0 0"><b>Pressure valve:</b> where cash can replace time — white-paper design, blog writing → freelance. Video production is winding down (repurpose existing testimonials). The calculator is already $0 (in-house dev), so scarce hours go to strategy + coordination, not production.</p>
+  </div>
+
+  <p class="legend" style="margin-top:24px"><span class="s">●</span> = added by the marketing-materials roadmap (white paper + case studies). Everything else was already in the channel plan.</p>
+  <p class="foot">Beam · Q3 2026 Inbound · thinking map — pairs with q3-inbound-channel-map-integrated.md (the numbers) and q3-marketing-materials-roadmap.md (the detail)</p>
+
+</div>
+</body>
+</html>
