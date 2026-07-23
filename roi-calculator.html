@@ -3,279 +3,260 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Beam — Back-Office Automation ROI Calculator (prototype v6)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Beam — Agent ROI Calculator</title>
+<!-- FREE tier: potential operating benefit before Beam costs. Capacity value is economic value, not
+     an assumed headcount reduction. The full business case carries the current inputs via URL params. -->
+<link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0a0a0a;--bg2:#111113;--bg3:#19191c;--bg4:#222226;
-    --white:#fff;--t1:rgba(255,255,255,.88);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.35);
-    --blue:#3b82f6;--green:#22c55e;
-    --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.12);
-    --r:16px;--r2:10px;
+  :root{--bg:#07090e;--surface:#0d1119;--surface2:#111722;--t1:#f7f8fb;--t2:#a1a8b5;--t3:#929cab;
+    --blue:#4776ff;--blue-deep:#80a1ff;--blue-soft:#dce6ff;--border:rgba(255,255,255,.09);--border-blue:rgba(91,133,255,.5);--r:20px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:'Satoshi',Arial,sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased;padding:28px 20px 36px;
+    background-image:radial-gradient(ellipse at 12% -8%,rgba(44,87,213,.32),transparent 40%),radial-gradient(ellipse at 96% 8%,rgba(46,93,232,.13),transparent 34%),linear-gradient(180deg,#080a10 0%,#05070b 100%);}
+  .wrap{width:100%;max-width:1120px;min-width:0;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:14px;margin-bottom:17px;min-height:31px}
+  .logo-img{display:block;width:98px;height:auto}
+  .brand-divider{width:1px;height:20px;background:rgba(255,255,255,.16)}
+  .eyebrow{font-size:11px;line-height:1;letter-spacing:.12em;text-transform:uppercase;color:#a8afba;font-weight:650;padding-top:1px}
+  .free-pill{margin-left:auto;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:#bed0ff;background:rgba(71,118,255,.10);border:1px solid rgba(99,140,255,.28);padding:5px 10px;border-radius:999px}
+  .intro{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:14px}
+  h1{font-size:38px;font-weight:500;letter-spacing:-.045em;line-height:1.04;color:#fff}
+  .sub{color:var(--t2);font-size:14px;max-width:600px;margin-top:6px}
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:510px;margin-bottom:14px}
+  .tab{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);color:#8e96a4;font-weight:650;font-size:13px;cursor:pointer;text-align:center;transition:all .2s}
+  .tab:hover{border-color:rgba(111,149,255,.42);color:#fff;background:rgba(255,255,255,.04)}
+  .tab.active{background:#f5f7fb;border-color:#f5f7fb;color:#0a0c11;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .tab:focus-visible,.cta:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #9db5ff;outline-offset:3px}
+  .layout{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:14px;align-items:start;min-width:0}
+  .card{min-width:0;background:linear-gradient(180deg,rgba(16,20,29,.94),rgba(10,13,19,.96));border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+  .ctl-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#829de8;font-weight:700;margin-bottom:17px}
+  .field{margin-bottom:15px}
+  .field:last-child{margin-bottom:0}
+  .field>label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#e9ecf2;margin-bottom:8px}
+  .control-row{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:12px;align-items:center}
+  .value-edit{height:38px;display:flex;align-items:center;justify-content:flex-end;color:#fff;font-size:15px;font-weight:700;white-space:nowrap;background:#151b26;border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:0 8px;transition:.18s}
+  .value-edit:focus-within{border-color:#6d91ff;background:rgba(71,118,255,.10);box-shadow:0 0 0 3px rgba(71,118,255,.12)}
+  .value-edit input{width:100%;min-width:0;padding:0;border:0;background:transparent;color:#fff;font:inherit;text-align:right;font-variant-numeric:tabular-nums;outline:none}
+  .label-copy{display:inline;white-space:normal}.label-unit{color:#8e98a8;font-size:11px;font-weight:500;margin-left:2px}
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type=range]{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:#242b38;border-radius:999px;outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid var(--blue);box-shadow:0 0 0 4px rgba(71,118,255,.12),0 4px 12px rgba(0,0,0,.5);cursor:grab}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid var(--blue)}
+  .hint{font-size:11px;color:var(--t3);margin-top:4px;line-height:1.35}
+  .info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid rgba(157,181,255,.34);border-radius:50%;color:#9eb2ee;font-size:9px;font-weight:650;line-height:1;cursor:help;flex:0 0 auto;transform:translateY(-.5px)}
+  .info-tip{position:absolute;z-index:20;left:50%;bottom:calc(100% + 9px);width:245px;padding:9px 11px;border:1px solid rgba(255,255,255,.13);border-radius:9px;background:#171d28;color:#d8dde7;font-size:11px;font-weight:450;line-height:1.4;box-shadow:0 12px 35px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translate(-50%,4px);transition:.16s;pointer-events:none}
+  .info:hover .info-tip,.info:focus .info-tip,.info:focus-within .info-tip{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .fine{margin-top:4px;border-top:1px solid var(--border);padding-top:3px}
+  .fine summary{list-style:none;cursor:pointer;padding:11px 0 7px;display:flex;align-items:center;justify-content:space-between;color:var(--t2);font-size:12px;font-weight:650}
+  .fine summary::-webkit-details-marker{display:none}.fine summary:after{content:'+';color:var(--blue);font-size:18px;font-weight:400}
+  .fine[open] summary:after{content:'−'}
+  .fine-body{padding-top:5px}
+  .result{position:sticky;top:18px;overflow:hidden;border-color:rgba(95,136,255,.42);background:linear-gradient(145deg,#121b35 0%,#0b1020 54%,#0a0d14 100%);display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(14,44,131,.18)}
+  .result:before{content:'';position:absolute;width:390px;height:390px;border-radius:50%;background:rgba(66,113,255,.28);filter:blur(85px);right:-130px;top:-215px;pointer-events:none}
+  .result:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.035),transparent 34%);pointer-events:none}
+  .result-kicker{position:relative;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#95afff;font-weight:700}
+  .result-value{position:relative;font-size:68px;font-weight:600;letter-spacing:-.06em;line-height:.96;color:#fff;margin:13px 0 8px;font-variant-numeric:tabular-nums}
+  .result-label{position:relative;font-size:15px;color:#e8edff;font-weight:600}.result-label span{color:#8793ac;font-weight:400}
+  .result-support{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:17px}
+  .support{position:relative;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.075);border-radius:12px;padding:12px 13px;backdrop-filter:blur(8px)}
+  .support .num{font-size:18px;font-weight:650;color:#fff;line-height:1.15;overflow-wrap:anywhere}.support .lab{font-size:10px;color:#79849a;margin-top:5px}
+  .compare-values{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare-values span+span{border-left:1px solid rgba(255,255,255,.10);padding-left:10px}
+  .compare-values small{display:block;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:#707c91;margin-bottom:3px}.compare-values b{font-size:16px;color:#fff;white-space:nowrap}
+  .btns{display:flex;flex-direction:column;gap:8px;margin-top:0;padding-top:20px}
+  .cta{position:relative;display:block;text-align:center;padding:12px 14px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;transition:.2s}
+  .cta-primary{background:#fff;color:#080b12;box-shadow:0 8px 26px rgba(0,0,0,.2)}.cta-primary:hover{background:#dce6ff;transform:translateY(-1px)}
+  .cta-secondary{background:rgba(255,255,255,.035);color:#dbe3f6;border:1px solid rgba(255,255,255,.13)}
+  .cta-secondary:hover{background:rgba(71,118,255,.12);border-color:rgba(110,149,255,.5)}
+  .cta-secondary .lk{color:#9db5ff}
+  .micro{font-size:10px;color:var(--t3);text-align:center;margin-top:8px}
+  .scenario-note{display:none;position:relative;margin-top:14px;padding:10px 12px;border-radius:10px;background:rgba(255,186,102,.08);border:1px solid rgba(255,186,102,.24);color:#d8b47f;font-size:11px;line-height:1.4}
+  .scenario-note.show{display:block}
+  .details-card{margin-top:12px;border:1px solid var(--border);border-radius:14px;background:rgba(13,16,23,.72);overflow:hidden}
+  .details-card summary{list-style:none;cursor:pointer;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:650;color:var(--t2)}
+  .details-card summary::-webkit-details-marker{display:none}.details-card summary:after{content:'View breakdown +';color:var(--blue-deep);font-weight:600}
+  .details-card[open] summary:after{content:'Hide breakdown −'}
+  .breakdown{padding:0 18px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .bd-box{border:1px solid var(--border);border-radius:11px;padding:12px;background:rgba(255,255,255,.025)}
+  .bd-box .lab{font-size:10px;color:var(--t3);margin-bottom:4px}.bd-box .amt{font-size:18px;font-weight:650;color:#fff}.bd-box.total .amt{color:#9db5ff}
+  .cpi{display:grid;grid-template-columns:1fr 1fr;gap:0}.cpi .side{padding:2px 10px}.cpi .side+ .side{border-left:1px solid var(--border)}.cpi .k{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em}.cpi .val{font-size:16px;font-weight:600;margin-top:3px}
+  .disclaimer{font-size:10px;color:var(--t3);margin-top:10px;line-height:1.45}
+  .foot{color:var(--t3);font-size:10px;margin-top:12px;line-height:1.5}
+  @media(max-width:900px){
+    body{padding:18px 14px 28px;overflow-x:hidden}.intro{display:block}.layout{grid-template-columns:minmax(0,1fr);width:100%}.result{order:-1;position:static}.result-value{font-size:54px}
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--t1);
-    font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding:32px 16px}
-  .wrap{max-width:1080px;margin:0 auto}
-  .brand{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px}
-  .tabs{display:flex;gap:8px;justify-content:center;margin:18px 0 22px;flex-wrap:wrap}
-  .tab{padding:9px 18px;border:1px solid var(--border);background:var(--bg3);color:var(--t2);border-radius:999px;cursor:pointer;font-weight:600;font-size:14px}
-  .tab.active{color:#000;border-color:var(--white);background:var(--white)}
-  h1{font-size:32px;text-align:center;margin:8px 0 6px;color:var(--white);letter-spacing:-.02em;line-height:1.15;font-weight:800}
-  .sub{color:var(--t2);text-align:center;margin:0 0 26px}
-  .layout{display:grid;grid-template-columns:1.35fr .65fr;gap:16px}
-  @media(max-width:820px){.layout{grid-template-columns:1fr}}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
-  .card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
-  .card .cl{font-size:12.5px;color:var(--t2)}
-  .card .ca{font-size:26px;font-weight:800;margin:8px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--green)}
-  .card .cs{font-size:12px;color:var(--t3)}
-  .panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px}
-  .fld{margin-bottom:22px}
-  .fld label{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:12px;font-size:14px;color:var(--t1)}
-  .fld .lab{display:inline-flex;align-items:center}
-  .fld .v{font-weight:700;font-variant-numeric:tabular-nums;color:var(--white)}
-  input[type=range]{width:100%;accent-color:var(--blue);height:4px}
-  .i{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--blue);color:var(--blue);font-size:10px;font-weight:700;font-style:normal;cursor:pointer;margin-left:6px;flex:0 0 16px;user-select:none}
-  .i:hover{background:var(--blue);color:#000}
-  .tip{position:absolute;z-index:1000;max-width:270px;background:var(--bg4);border:1px solid var(--border2);color:var(--t1);
-    padding:11px 13px;border-radius:8px;font-size:12.5px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none}
-  .acc{margin-top:6px;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;background:var(--bg3)}
-  .acc>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:600;display:flex;justify-content:space-between;font-size:14px;color:var(--t1)}
-  .acc>summary::-webkit-details-marker{display:none}
-  .acc[open]>summary{border-bottom:1px solid var(--border)}
-  .agrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px}
-  @media(max-width:560px){.agrid{grid-template-columns:1fr}}
-  .afld label{display:flex;align-items:center;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--t2)}
-  .afld input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:14px;font-family:inherit;color:var(--white)}
-  .grp{grid-column:1/-1;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-top:4px}
-  .report h3{margin:0 0 2px;font-size:18px;letter-spacing:-.01em;color:var(--white)}
-  .report .rs{color:var(--t2);font-size:13px;margin-bottom:16px}
-  .today{font-size:13px;color:var(--t2);margin-bottom:2px}
-  .today b{color:var(--white)}
-  .totalbox{border:1px solid var(--border);background:var(--bg3);border-radius:var(--r2);text-align:center;padding:18px;margin:8px 0 16px}
-  .totalbox .l{font-size:12.5px;color:var(--t2)}
-  .totalbox .t{font-size:36px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-  .totalbox .p{font-size:12.5px;color:var(--blue);font-weight:600;margin-top:2px}
-  .bul{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--t1);margin:11px 0}
-  .bul .ic{width:7px;height:7px;border-radius:2px;background:var(--blue);flex:0 0 7px;transform:rotate(45deg)}
-  .cta{display:block;width:100%;margin-top:16px;padding:14px;border:1px solid var(--white);border-radius:8px;cursor:pointer;font-weight:600;font-size:15px;color:#000;background:var(--white);font-family:inherit}
-  .cta:hover{background:#e5e5e5}
-  .email{width:100%;margin-top:12px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;font-family:inherit;color:var(--white)}
-  .free{text-align:center;color:var(--t3);font-size:12px;margin-top:8px}
-  .social{text-align:center;color:var(--t3);font-size:13px;margin-top:26px}
-  .foot{color:var(--t3);font-size:12px;margin-top:10px;text-align:center;line-height:1.6}
+  @media(max-width:560px){
+    h1{font-size:27px}.sub{font-size:13px}.tabs{grid-template-columns:minmax(0,1fr)}.tab{padding:8px}.result-support{grid-template-columns:repeat(2,minmax(0,1fr))}.support:last-child{grid-column:1/-1}.breakdown{grid-template-columns:minmax(0,1fr)}.result-value{font-size:48px}.control-row{grid-template-columns:minmax(0,1fr) 82px;gap:10px}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brand">
-    <svg width="86" height="22" viewBox="0 0 100 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4L2 12L8 20M16 4L10 12L16 20M24 4L18 12L24 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="32" y="18" fill="white" font-family="Inter" font-weight="800" font-size="18">beam</text>
-    </svg>
+    <img class="logo-img" src="beam-logo-white.svg" alt="Beam">
+    <span class="brand-divider" aria-hidden="true"></span>
+    <span class="eyebrow">ROI calculator</span>
+    <span class="free-pill">Free estimate</span>
   </div>
-  <h1 id="title"></h1>
-  <p class="sub" id="subtitle"></p>
+  <div class="intro">
+    <div><h1>How much could automation save your team?</h1><p class="sub">Select the task, then enter how your team handles it today. We’ll estimate the annual operating benefit from released capacity and avoidable rework.</p></div>
+  </div>
 
-  <div class="tabs" id="tabs"></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Task type">
+    <button type="button" role="tab" aria-selected="true" class="tab active" data-icp="invoice">Invoice Processing</button>
+    <button type="button" role="tab" aria-selected="false" class="tab" data-icp="rpo">Recruiting / RPO</button>
+    <button type="button" role="tab" aria-selected="false" class="tab" data-icp="bpo">BPO / Operations</button>
+  </div>
 
   <div class="layout">
-    <div>
-      <div class="cards" id="cards"></div>
-      <div class="panel">
-        <div id="inputs"></div>
-        <details class="acc">
-          <summary>Fine-tune the assumptions <span>⌄</span></summary>
-          <div class="agrid" id="advanced"></div>
-        </details>
+    <div class="card">
+      <div class="ctl-title">Your operation</div>
+      <div class="field">
+        <label for="v-volume" id="lbl-volume">Monthly volume</label>
+        <div class="control-row"><input type="range" id="volume" min="200" max="40000" step="100" value="5000" aria-label="Monthly volume"><span class="value-edit"><input type="number" id="v-volume" min="200" max="40000" step="100" value="5000" aria-label="Monthly volume"></span></div>
+        <div class="hint" id="hint-volume">Items processed each month.</div>
       </div>
+      <div class="field">
+        <label for="v-hours"><span class="label-copy">Manual time per item<span class="label-unit"> (hours)</span></span></label>
+        <div class="control-row"><input type="range" id="hours" min="0.02" max="1" step="0.01" value="0.20" aria-label="Manual time per item in hours"><span class="value-edit"><input type="number" id="v-hours" min="0.02" max="1" step="0.01" value="0.20" aria-label="Manual time per item in hours"></span></div>
+        <div class="hint">Hands-on time today, including checks and follow-up.</div>
+      </div>
+      <div class="field">
+        <label for="v-cost"><span class="label-copy">Fully-loaded cost per hour<span class="label-unit"> (USD)</span></span></label>
+        <div class="control-row"><input type="range" id="cost" min="10" max="120" step="5" value="30" aria-label="Fully-loaded hourly cost in USD"><span class="value-edit"><input type="number" id="v-cost" min="10" max="120" step="5" value="30" aria-label="Fully-loaded hourly cost in USD"></span></div>
+        <div class="hint">Salary, benefits, taxes and overhead.</div>
+      </div>
+      <details class="fine">
+        <summary>Fine-tune the estimate</summary>
+        <div class="fine-body">
+          <div class="field">
+            <label for="v-auto"><span class="label-copy">Manual effort reduction<span class="label-unit"> (%)</span></span><span class="info" tabindex="0" aria-label="About manual effort reduction">i<span class="info-tip" role="tooltip">The share of hands-on work removed once the automation is fully running, after human review and exception handling.</span></span></label>
+            <div class="control-row"><input type="range" id="auto" min="30" max="95" step="5" value="70" aria-label="Manual effort reduction percentage"><span class="value-edit"><input type="number" id="v-auto" min="30" max="95" step="5" value="70" aria-label="Manual effort reduction percentage"></span></div>
+          </div>
+          <div class="field">
+            <label for="v-rework"><span class="label-copy">Average error / rework cost<span class="label-unit"> (USD per item)</span></span><span class="info" tabindex="0" aria-label="About average rework cost">i<span class="info-tip" role="tooltip">Average rework cost spread across every processed item—not the cost of one exception. The model treats 50% as avoidable.</span></span></label>
+            <div class="control-row"><input type="range" id="rework" min="0" max="40" step="1" value="3" aria-label="Average error or rework cost in USD per item"><span class="value-edit"><input type="number" id="v-rework" min="0" max="40" step="1" value="3" aria-label="Average error or rework cost in USD per item"></span></div>
+          </div>
+        </div>
+      </details>
+      <p class="disclaimer"><span id="estimate-error">Expected error allowance: —</span></p>
     </div>
 
-    <div class="panel report">
-      <h3>Your report</h3>
-      <div class="rs">A breakdown you can send to finance</div>
-      <div class="today">Manual cost of this work today: <b id="today">$0</b></div>
-      <div class="totalbox">
-        <div class="l">You could reclaim about</div>
-        <div class="t" id="total">$0</div>
-        <div class="p" id="pct"></div>
+    <div class="card result" id="result-card" aria-live="polite">
+      <div class="result-kicker">Potential annual operating benefit</div>
+      <div class="result-value" id="out-value">—</div>
+      <div class="result-label">capacity value + avoidable rework · before Beam costs <span id="hl-sub"></span></div>
+      <p class="scenario-note" id="scenario-note"></p>
+      <div class="result-support">
+        <div class="support"><div class="num" id="out-hours">—</div><div class="lab">capacity hours back / year</div></div>
+        <div class="support"><div class="num" id="out-time">—</div><div class="lab">manual time: before → after</div></div>
+        <div class="support"><div class="compare-values"><span><small>Today</small><b id="hero-cpi-before">—</b></span><span><small>After</small><b id="hero-cpi-after">—</b></span></div><div class="lab">operating cost / item</div></div>
       </div>
-      <div class="bul"><span class="ic"></span> Line-by-line savings breakdown</div>
-      <div class="bul"><span class="ic"></span> Which Beam agents fit your workflow</div>
-      <div class="bul"><span class="ic"></span> Results from companies like yours</div>
-      <div class="bul"><span class="ic"></span> A shareable link for your stakeholders</div>
-      <input class="email" id="email" type="email" placeholder="you@company.com"/>
-      <button class="cta" id="cta">Get my report + custom quote →</button>
-      <div class="free">Free · takes 30 seconds · no obligation</div>
+      <div class="btns">
+        <a href="roi-calculator-report.html" class="cta cta-primary" id="cta-report">Build my full business case →</a>
+      </div>
+      <p class="micro">Adds rollout · estimated platform and AI cost · operating ROI · payback</p>
     </div>
   </div>
 
-  <div class="social">Beam automates finance, recruiting and BPO operations for enterprise teams</div>
-  <p class="foot">Prototype. Estimates use illustrative benchmark defaults (to be replaced with Beam's verified customer results). Tap or hover any ⓘ for what to enter. Beam's typical improvement rates are built into the results; your SE tailors them and the net ROI in your demo.</p>
+  <details class="details-card">
+    <summary>See how the total is split</summary>
+    <div class="breakdown">
+      <div class="bd-box"><div class="lab">Value of capacity released</div><div class="amt" id="bd-labour">—</div></div>
+      <div class="bd-box"><div class="lab">Avoidable rework value</div><div class="amt" id="bd-error">—</div></div>
+      <div class="bd-box" style="grid-column:1/-1">
+        <div class="cpi">
+          <div class="side"><div class="k">Operating cost today</div><div class="val" id="cpi-before">—</div></div>
+          <div class="side"><div class="k">After automation</div><div class="val" id="cpi-after">—</div></div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <p class="foot">Planning estimate, not a guarantee. Released capacity is economic value, not an assumed headcount reduction or automatic cash saving. Beam pricing is excluded. Inputs stay in your browser and are not stored.</p>
 </div>
 
 <script>
-  function money(n){return '$'+Math.round(n).toLocaleString();}
-  function num(n){return Math.round(n).toLocaleString();}
-  function g(id){return +document.getElementById(id).value;}
-  function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;');}
-  function help(f){return f.help?' <span class="i" data-help="'+esc(f.help)+'">i</span>':'';}
-
-  var TABS = {
-    finance:{
-      label:'Finance / AP',
-      title:'What is manual accounts payable really costing you?',
-      subtitle:'See the cost of the status quo — and what Beam reclaims.',
-      simple:[
-        {id:'f_inv',label:'Invoices per month',min:200,max:50000,step:100,val:5000,fmt:num,help:'Supplier invoices your AP team processes each month.'},
-        {id:'f_spend',label:'Annual AP spend',min:1000000,max:500000000,step:1000000,val:25000000,fmt:money,help:'Total you pay suppliers per year — used to size early-payment discounts.'},
-        {id:'f_staff',label:'AP team size (FTEs)',min:1,max:100,step:1,val:8,fmt:function(v){return v;},help:'People who touch accounts payable day to day.'}
-      ],
-      advanced:[
-        {grp:'Your operation'},
-        {id:'f_cm',label:'Manual cost per invoice ($)',val:12,help:'All-in cost to process one invoice by hand: labor + overhead + error rework. Industry average is about $10 to $15. Find it as (annual AP team cost) / (invoices per year).'},
-        {id:'f_dp',label:'% of spend with early-pay discounts',val:20,help:'Share of supplier spend that offers a discount for paying early (e.g. 2/10 net 30). Ask AP or procurement.'},
-        {id:'f_dr',label:'Avg early-pay discount (%)',val:2,help:'Typical discount suppliers give for early payment. Common is 1 to 2 percent.'},
-        {id:'f_er',label:'Invoices with errors/exceptions (%)',val:10,help:'Share of invoices that hit an error or exception needing a manual fix.'},
-        {id:'f_ce',label:'Cost to fix one exception ($)',val:40,help:'Staff time to research and resolve one problem invoice, at loaded hourly cost.'}
-      ],
-      beam:{ca:3, cl:50, auto:70},
-      baseline:function(){return g('f_inv')*12*g('f_cm');},
-      compute:function(){
-        var invYr=g('f_inv')*12, auto=this.beam.auto/100;
-        var processing=invYr*auto*(g('f_cm')-this.beam.ca);
-        var discounts=g('f_spend')*(g('f_dp')/100)*(g('f_dr')/100)*(this.beam.cl/100);
-        var errors=invYr*(g('f_er')/100)*g('f_ce')*auto;
-        return [
-          {label:'Processing savings',sub:'Lower cost per invoice',amt:processing},
-          {label:'Early-payment capture',sub:'More discounts captured',amt:discounts},
-          {label:'Exception savings',sub:'Fewer errors & rework',amt:errors}
-        ];
-      }
-    },
-    rpo:{
-      label:'Recruiting / RPO',
-      title:'What is your manual recruiting process costing you?',
-      subtitle:'See the exposure — and what Beam reclaims each year.',
-      simple:[
-        {id:'r_apps',label:'Applications per year',min:0,max:1000000,step:5000,val:200000,fmt:num,help:'Total applications your team reviews per year.'},
-        {id:'r_hires',label:'New hires per year',min:0,max:50000,step:100,val:1000,fmt:num,help:'Roles you fill per year.'},
-        {id:'r_tth',label:'Time to hire (days)',min:0,max:120,step:1,val:40,fmt:function(v){return v+' days';},help:'Average days from opening a role to a signed offer.'},
-        {id:'r_turn',label:'3-month turnover (%)',min:0,max:50,step:1,val:21,fmt:function(v){return v+'%';},help:'Share of new hires who leave within about 3 months.'}
-      ],
-      advanced:[
-        {grp:'Your operation'},
-        {id:'r_rate',label:'Recruiter loaded cost ($/h)',val:30,help:'Recruiter salary + benefits + overhead, divided by working hours.'},
-        {id:'r_sm',label:'Screening time per application (mins)',val:3,help:'Minutes to screen one application by hand.'},
-        {id:'r_ct',label:'Average cost of turnover ($)',val:15000,help:'Cost to replace one early leaver: re-hire + ramp + lost output. Often 0.5 to 2x salary.'},
-        {id:'r_vac',label:'Daily cost of unfilled role ($)',val:200,help:'Lost productivity or revenue for each day a role stays open.'}
-      ],
-      beam:{tr:30, tur:20},
-      baseline:function(){
-        return g('r_apps')*(g('r_sm')/60)*g('r_rate') + g('r_hires')*(g('r_turn')/100)*g('r_ct') + g('r_hires')*g('r_tth')*g('r_vac');
-      },
-      compute:function(){
-        var screening=g('r_apps')*(g('r_sm')/60)*g('r_rate');
-        var turnover=g('r_hires')*(g('r_turn')/100)*g('r_ct')*(this.beam.tur/100);
-        var tth=g('r_hires')*(g('r_tth')*(this.beam.tr/100))*g('r_vac');
-        return [
-          {label:'Screening savings',sub:'Time saved reviewing applications',amt:screening},
-          {label:'Turnover savings',sub:'Better hires, less attrition',amt:turnover},
-          {label:'Time-to-hire savings',sub:'Faster hiring process',amt:tth}
-        ];
-      }
-    },
-    bpo:{
-      label:'BPO / Operations',
-      title:'How much back-office cost can automation take out?',
-      subtitle:'Cost reclaimed, rework avoided, and capacity you get back.',
-      simple:[
-        {id:'b_fte',label:'Back-office FTEs / agents',min:10,max:5000,step:10,val:200,fmt:num,help:'How many people do the manual back-office work you would automate.'},
-        {id:'b_cost',label:'Fully-loaded cost per FTE / year',min:8000,max:120000,step:1000,val:35000,fmt:money,help:'One agent’s total annual cost: salary + benefits + overhead.'},
-        {id:'b_tasks',label:'Transactions processed / month',min:1000,max:2000000,step:1000,val:100000,fmt:num,help:'Items your team processes monthly — claims, invoices, tickets, records, etc.'}
-      ],
-      advanced:[
-        {grp:'Your operation'},
-        {id:'b_er',label:'Transactions with errors/rework (%)',val:5,help:'Share of items that need a correction or rework today.'},
-        {id:'b_ce',label:'Cost to fix one error ($)',val:25,help:'Staff time to correct one bad transaction, at loaded hourly cost.'}
-      ],
-      beam:{auto:50},
-      baseline:function(){return g('b_fte')*g('b_cost') + g('b_tasks')*12*(g('b_er')/100)*g('b_ce');},
-      compute:function(){
-        var auto=this.beam.auto/100;
-        var labor=g('b_fte')*g('b_cost')*auto;
-        var quality=g('b_tasks')*12*(g('b_er')/100)*g('b_ce')*auto;
-        var freed=g('b_fte')*auto;
-        return [
-          {label:'Labor cost reclaimed',sub:'Cost of the work automated',amt:labor},
-          {label:'Rework avoided',sub:'Fewer errors & corrections',amt:quality},
-          {label:'Capacity freed',sub:'Redeploy to billable work',amt:0,disp:'≈ '+num(freed)+' FTEs'}
-        ];
-      }
-    }
+(function(){
+  var ICPS={
+    invoice:{label:'Invoice',volume:5000,hours:0.20,auto:75,cost:35,rework:4,errorMargin:35,volLabel:'Monthly invoices',volHint:'Items processed each month.',autoHint:'Steady-state effort reduction after residual review and exceptions.',sub:'(Invoice processing)'},
+    rpo:{label:'RPO',volume:10000,hours:0.12,auto:75,cost:40,rework:0,errorMargin:15,volLabel:'Monthly CVs / applications',volHint:'Candidates screened each month.',autoHint:'Steady-state effort reduction after human review.',sub:'(Recruiting / RPO)'},
+    bpo:{label:'BPO',volume:10000,hours:0.20,auto:70,cost:30,rework:3,errorMargin:50,volLabel:'Monthly transactions',volHint:'Orders, tickets or records processed each month.',autoHint:'Steady-state effort reduction after residual review and exceptions.',sub:'(BPO / Operations)'}
   };
+  var ERROR_AVOIDED=0.50; // Finance-locked ROI model default.
+  var activeICP='invoice';
+  var el=function(id){return document.getElementById(id);};
+  var fmtNum=function(n){return Math.round(n).toLocaleString('en-US');};
+  var fmtUSD=function(n){if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return '$'+fmtNum(n);return '$'+Math.round(n);};
+  var fmtHrs=function(n){if(n>=1e6)return (n/1e6).toFixed(1)+'M hrs';if(n>=1e3)return fmtNum(n)+' hrs';return Math.round(n)+' hrs';};
+  var fmtMin=function(h){var m=h*60;return m<1?'<1 min':(m<60?m.toFixed(0)+' min':h.toFixed(1)+' h');};
+  var fmtC=function(n){return '$'+(n<10?n.toFixed(2):Math.round(n).toLocaleString('en-US'));};
+  function flash(id){var n=el(id);if(!n)return;n.classList.add('flash');setTimeout(function(){n.classList.remove('flash');},280);}
 
-  var cur='finance';
-  var tabsEl=document.getElementById('tabs');
-  Object.keys(TABS).forEach(function(k){
-    var b=document.createElement('div'); b.className='tab'+(k===cur?' active':''); b.textContent=TABS[k].label;
-    b.onclick=function(){cur=k; Array.prototype.forEach.call(tabsEl.children,function(c){c.classList.remove('active');}); b.classList.add('active'); build();};
-    tabsEl.appendChild(b);
-  });
-
-  function build(){
-    var t=TABS[cur];
-    document.getElementById('title').textContent=t.title;
-    document.getElementById('subtitle').textContent=t.subtitle;
-    var si=document.getElementById('inputs'); si.innerHTML='';
-    t.simple.forEach(function(f){
-      si.insertAdjacentHTML('beforeend','<div class="fld"><label><span class="lab">'+f.label+help(f)+'</span><span class="v" id="'+f.id+'_v"></span></label><input type="range" id="'+f.id+'" min="'+f.min+'" max="'+f.max+'" step="'+f.step+'" value="'+f.val+'"></div>');
+  function calc(){
+    var volume=+el('volume').value,hours=+el('hours').value,autoPct=+el('auto').value/100,cost=+el('cost').value,rework=+el('rework').value;
+    var annualVol=volume*12;
+    var hoursSaved=annualVol*hours*autoPct;
+    var labour=hoursSaved*cost;
+    var error=annualVol*rework*ERROR_AVOIDED;
+    var gross=labour+error;
+    var resHrs=hours*(1-autoPct);
+    var cpiBefore=hours*cost+rework;
+    var cpiAfter=(hours*cost*(1-autoPct))+(rework*(1-ERROR_AVOIDED));
+    return {volume:volume,hours:hours,autoPct:autoPct,cost:cost,rework:rework,hoursSaved:hoursSaved,labour:labour,error:error,gross:gross,resHrs:resHrs,cpiBefore:cpiBefore,cpiAfter:cpiAfter};
+  }
+  function reviewReasons(r,c){
+    var reasons=[];
+    if(r.hours>c.hours*2)reasons.push('manual time');
+    if(r.cost>c.cost*1.75)reasons.push('loaded hourly cost');
+    if(r.autoPct>0.85)reasons.push('effort reduction');
+    if(r.rework>Math.max(c.rework*3,10))reasons.push('rework cost');
+    if(r.volume>Math.max(c.volume*3,30000))reasons.push('monthly volume');
+    return reasons.length>=2?reasons:[];
+  }
+  function update(){
+    var c=ICPS[activeICP],r=calc(),review=reviewReasons(r,c);
+    el('v-volume').value=r.volume;el('v-hours').value=r.hours.toFixed(2);
+    el('v-auto').value=Math.round(r.autoPct*100);el('v-rework').value=r.rework;el('v-cost').value=r.cost;
+    el('hl-sub').textContent=review.length?'· tailored estimate recommended':c.sub;
+    el('scenario-note').classList.toggle('show',review.length>0);
+    el('scenario-note').textContent=review.length?'This combination needs a tailored estimate that accounts for '+review.join(', ')+'. Build the full business case with Beam.':'';
+    el('out-hours').textContent=review.length?'Custom estimate':fmtHrs(r.hoursSaved);el('out-value').textContent=review.length?'Tailored estimate':fmtUSD(r.gross);
+    el('out-time').textContent=review.length?'Custom estimate':fmtMin(r.hours)+' → '+fmtMin(r.resHrs);
+    el('hero-cpi-before').textContent=review.length?'—':fmtC(r.cpiBefore);el('hero-cpi-after').textContent=review.length?'—':fmtC(r.cpiAfter);
+    el('bd-labour').textContent=review.length?'Custom estimate':fmtUSD(r.labour);el('bd-error').textContent=review.length?'Custom estimate':fmtUSD(r.error);
+    el('cpi-before').textContent=fmtC(r.cpiBefore);el('cpi-after').textContent=review.length?'Custom estimate':fmtC(r.cpiAfter);
+    el('estimate-error').textContent='Expected error allowance: ±'+c.errorMargin+'% based on the available validation and benchmark spread.';
+    var q='?icp='+activeICP+'&vol='+r.volume+'&hrs='+r.hours+'&auto='+Math.round(r.autoPct*100)+'&cost='+r.cost+'&rework='+r.rework;
+    el('cta-report').setAttribute('href','roi-calculator-report.html'+q);
+    flash('result-card');
+  }
+  function setICP(key){
+    activeICP=key;var c=ICPS[key];
+    el('volume').value=c.volume;el('hours').value=c.hours;el('auto').value=c.auto;el('cost').value=c.cost;el('rework').value=c.rework;
+    document.querySelectorAll('#tabs .tab').forEach(function(t){var selected=t.dataset.icp===key;t.classList.toggle('active',selected);t.setAttribute('aria-selected',String(selected));});
+    el('lbl-volume').textContent=c.volLabel;el('hint-volume').textContent=c.volHint;
+    update();
+  }
+  ['volume','hours','auto','cost','rework'].forEach(function(id){el(id).addEventListener('input',update);});
+  [
+    ['v-volume','volume'],['v-hours','hours'],['v-cost','cost'],['v-auto','auto'],['v-rework','rework']
+  ].forEach(function(pair){
+    var number=el(pair[0]),range=el(pair[1]);
+    number.addEventListener('input',function(){
+      if(number.value==='')return;
+      var value=+number.value;
+      if(!Number.isFinite(value))return;
+      range.value=Math.min(+range.max,Math.max(+range.min,value));
     });
-    var ad=document.getElementById('advanced'); ad.innerHTML='';
-    t.advanced.forEach(function(f){
-      if(f.grp){ad.insertAdjacentHTML('beforeend','<div class="grp">'+f.grp+'</div>');return;}
-      ad.insertAdjacentHTML('beforeend','<div class="afld"><label>'+f.label+help(f)+'</label><input type="number" id="'+f.id+'" value="'+f.val+'"></div>');
+    number.addEventListener('change',function(){
+      if(number.value==='')number.value=range.value;
+      range.value=Math.min(+range.max,Math.max(+range.min,+number.value));
+      update();
     });
-    document.querySelectorAll('#inputs input, #advanced input').forEach(function(inp){inp.addEventListener('input',compute);});
-    compute();
-  }
-
-  function compute(){
-    var t=TABS[cur];
-    t.simple.forEach(function(f){var e=document.getElementById(f.id+'_v'); if(e) e.textContent=f.fmt(g(f.id));});
-    var cards=t.compute(), total=0, html='';
-    cards.forEach(function(c){total+=c.amt; html+='<div class="card"><div class="cl">'+c.label+'</div><div class="ca">'+(c.disp||money(c.amt))+'</div><div class="cs">'+c.sub+'</div></div>';});
-    document.getElementById('cards').innerHTML=html;
-    var base=t.baseline();
-    document.getElementById('today').textContent=money(base);
-    document.getElementById('total').textContent=money(total);
-    var pct=base>0?Math.min(99,Math.round(total/base*100)):0;
-    document.getElementById('pct').textContent=pct>0?('≈ '+pct+'% of today’s cost'):'';
-  }
-
-  // ---- working tooltips (hover + tap) ----
-  var tip=document.createElement('div'); tip.className='tip'; document.body.appendChild(tip); var tipFor=null;
-  function showTip(el){
-    var h=el.getAttribute('data-help'); if(!h) return;
-    tip.textContent=h; tip.style.display='block';
-    var r=el.getBoundingClientRect();
-    var left=r.left+window.scrollX;
-    var maxLeft=window.scrollX+document.documentElement.clientWidth-tip.offsetWidth-12;
-    if(left>maxLeft) left=maxLeft; if(left<10) left=10;
-    tip.style.left=left+'px'; tip.style.top=(r.bottom+window.scrollY+8)+'px';
-  }
-  function hideTip(){tip.style.display='none'; tipFor=null;}
-  document.addEventListener('mouseover',function(e){var el=e.target.closest && e.target.closest('.i'); if(el){showTip(el);}});
-  document.addEventListener('mouseout',function(e){var el=e.target.closest && e.target.closest('.i'); if(el && tipFor!==el){hideTip();}});
-  document.addEventListener('click',function(e){
-    var el=e.target.closest && e.target.closest('.i');
-    if(el){e.preventDefault(); e.stopPropagation(); if(tipFor===el){hideTip();} else {showTip(el); tipFor=el;} }
-    else {hideTip();}
+    number.addEventListener('keydown',function(e){if(e.key==='Enter')number.blur();});
   });
-
-  build();
+  document.querySelectorAll('#tabs .tab').forEach(function(t){t.addEventListener('click',function(){setICP(t.dataset.icp);});});
+  setICP('invoice');
+})();
 </script>
 </body>
 </html>

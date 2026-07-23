@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Beam — Your Business Case</title>
+<!-- GATED tier: operating case with rollout, platform and measured AI costs. One-time setup,
+     professional services and optional dedicated auth require scope and are therefore excluded
+     explicitly rather than being misrepresented as a complete Beam investment. -->
+<link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+<style>
+  :root{--bg:#07090e;--surface:#0d1119;--surface2:#111722;--t1:#f7f8fb;--t2:#a1a8b5;--t3:#929cab;
+    --blue:#4776ff;--blue-hi:#9db5ff;--blue-soft:#dce6ff;--green:#95ff80;--amber:#ffba66;--border:rgba(255,255,255,.09);--r:20px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:'Satoshi',Arial,sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased;padding:28px 20px 40px;
+    background-image:radial-gradient(ellipse at 12% -8%,rgba(44,87,213,.32),transparent 40%),radial-gradient(ellipse at 96% 8%,rgba(46,93,232,.13),transparent 34%),linear-gradient(180deg,#080a10 0%,#05070b 100%);}
+  .wrap{width:100%;max-width:1120px;min-width:0;margin:0 auto;overflow-wrap:break-word}
+  a.back{display:inline-block;color:#8993a4;font-size:12px;text-decoration:none;margin-bottom:16px}a.back:hover{color:#fff}
+  .brand{display:flex;align-items:center;gap:14px;margin-bottom:10px;min-height:31px}
+  .logo-img{display:block;width:98px;height:auto}.brand-divider{width:1px;height:20px;background:rgba(255,255,255,.16)}
+  .report-name{font-size:11px;line-height:1;letter-spacing:.12em;text-transform:uppercase;color:#a8afba;font-weight:650}
+  .gate-pill{margin-left:auto;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:#bed0ff;background:rgba(71,118,255,.10);border:1px solid rgba(99,140,255,.28);padding:5px 10px;border-radius:999px}
+  .prepared{font-size:12px;color:#798293;margin-bottom:8px}
+  h1{font-size:36px;font-weight:500;letter-spacing:-.04em;line-height:1.08;margin-bottom:18px;color:#fff;max-width:960px}
+  h1 .g{color:var(--blue-hi)}
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:560px;margin-bottom:18px}
+  .tab{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);color:#8e96a4;font-weight:650;font-size:13px;cursor:pointer;text-align:center;transition:all .2s}
+  .tab:hover{border-color:rgba(111,149,255,.42);color:#fff}.tab.active{background:#f5f7fb;border-color:#f5f7fb;color:#0a0c11;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .tab:focus-visible,.cta:focus-visible,.review-cta:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #9db5ff;outline-offset:3px}
+  .layout{display:grid;grid-template-columns:minmax(310px,360px) minmax(0,1fr);gap:16px;align-items:start;min-width:0}
+  .card{background:linear-gradient(180deg,rgba(16,20,29,.94),rgba(10,13,19,.96));border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.20)}
+  .inputs{position:sticky;top:18px}.card-green,.card-blue{background:linear-gradient(145deg,#121b35 0%,#0b1020 58%,#0a0d14 100%);border-color:rgba(95,136,255,.34)}
+  .card-amber{background:rgba(255,186,102,.07);border:1px solid rgba(255,186,102,.22)}
+  .ctl-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#829de8;font-weight:700;margin-bottom:16px}
+  .field{margin-bottom:16px}.field>label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#e9ecf2;margin-bottom:7px}
+  .field.needs-review>label{color:var(--amber)}.field.needs-review .value-edit{border-color:rgba(255,186,102,.5);background:rgba(255,186,102,.07)}.field.needs-review input[type=range]::-webkit-slider-thumb{border-color:var(--amber)}
+  .control-row{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:10px;align-items:center}
+  .value-edit{height:38px;display:flex;align-items:center;justify-content:flex-end;color:#fff;font-size:14px;font-weight:700;background:#151b26;border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:0 8px}
+  .value-edit:focus-within{border-color:#6d91ff;background:rgba(71,118,255,.10);box-shadow:0 0 0 3px rgba(71,118,255,.12)}
+  .value-edit input{width:100%;min-width:0;border:0;background:transparent;color:#fff;font:inherit;text-align:right;outline:none;font-variant-numeric:tabular-nums}
+  .label-copy{display:inline;white-space:normal}.label-unit{color:#8e98a8;font-size:10px;font-weight:500;margin-left:2px}
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type=range]{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:#242b38;border-radius:999px;outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid var(--blue);box-shadow:0 0 0 4px rgba(71,118,255,.12),0 4px 12px rgba(0,0,0,.5)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid var(--blue)}
+  .info{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid rgba(157,181,255,.34);border-radius:50%;color:#9eb2ee;font-size:9px;font-weight:650;line-height:1;cursor:help;flex:0 0 auto;transform:translateY(-.5px)}
+  .info-tip{position:absolute;z-index:20;left:50%;bottom:calc(100% + 9px);width:245px;padding:9px 11px;border:1px solid rgba(255,255,255,.13);border-radius:9px;background:#171d28;color:#d8dde7;font-size:11px;font-weight:450;line-height:1.4;box-shadow:0 12px 35px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translate(-50%,4px);transition:.16s;pointer-events:none}
+  .info:hover .info-tip,.info:focus .info-tip,.info:focus-within .info-tip{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .select-wrap{margin-top:14px}.select-wrap label{display:block;font-size:12px;font-weight:600;color:#e9ecf2;margin-bottom:7px}
+  .select-wrap label{display:flex;align-items:center;gap:6px}
+  .select-wrap select{width:100%;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.13);background-color:#151b26;color:#fff;padding:0 38px 0 11px;font:inherit;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#9aa5b7 50%),linear-gradient(135deg,#9aa5b7 50%,transparent 50%);background-position:calc(100% - 17px) 17px,calc(100% - 12px) 17px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+  .output{display:flex;flex-direction:column;gap:16px;min-width:0}.inputs,.output,.card{min-width:0}
+  .hero{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:10px}
+  .hero.custom-state{grid-template-columns:minmax(0,1fr)}.hero.custom-state .h:not(:first-child){display:none}.hero.custom-state .h:first-child{min-height:138px;justify-content:center}.hero.custom-state .h:first-child .num{font-size:30px;white-space:normal}
+  .review-cta{display:none;width:max-content;margin-top:8px;padding:10px 14px;border-radius:8px;background:#fff;color:#080b12;text-decoration:none;font-size:12px;font-weight:700}.hero.custom-state .review-cta{display:inline-block}
+  .output.custom-output .tbl,.output.custom-output .mini,.output.custom-output .phases,.output.custom-output .report-notes{display:none}
+  .inputs.custom-input .card-amber{display:none}
+  .hero .h{padding:18px;border-radius:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .hero .num{font-size:clamp(25px,3vw,38px);font-weight:600;letter-spacing:-.045em;line-height:1;transition:color .2s;white-space:nowrap}
+  .hero .num.g,.hero .num.b{color:#fff}
+  .hero .k{font-size:14px;font-weight:500;color:#fff}.hero .s{font-size:12px;color:var(--t2)}
+  .hero.flash .num{color:#fff!important}
+  .tbl{padding:20px 22px}.tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .tr:last-child{border-bottom:none}.tr .lab{color:var(--t2)}.tr .amt{font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+  .tr.sub .lab{padding-left:14px;color:var(--t3);font-size:13px}.tr.sub .amt{color:var(--t2);font-weight:500}
+  .tr.gross .amt{color:var(--blue-hi)}.tr.invest .amt{color:var(--amber)}
+  .tr.net .lab{color:#fff;font-weight:600}.tr.net .amt{color:#fff;font-size:18px}
+  .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .mini .m{padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
+  .mini .m .num{font-size:22px;font-weight:600;color:#fff;line-height:1.1;overflow-wrap:anywhere}.mini .m .k{font-size:11px;color:var(--t2);margin-top:6px}
+  .phases{padding:20px 22px}.bars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;height:230px;padding:8px 4px 0}
+  .bar-col{min-width:0;display:grid;grid-template-rows:24px 150px 34px;align-items:end;gap:7px;text-align:center}
+  .bar-track{width:100%;height:150px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid var(--border);display:flex;align-items:flex-end;overflow:hidden}
+  .bar-fill{width:100%;border-radius:7px 7px 0 0;background:linear-gradient(180deg,#7197ff,#365fd5);transition:height .35s cubic-bezier(.34,1.2,.64,1);min-height:3px}
+  .bar-lab{font-size:10px;color:#778194;text-align:center;line-height:1.25;align-self:start}.bar-val{font-size:12px;font-weight:650;color:#fff;white-space:nowrap}
+  .chart-review{display:none;padding:24px 16px;margin:8px 0 4px;border:1px dashed rgba(255,186,102,.28);border-radius:12px;text-align:center;color:#b8966e;font-size:12px}.phases.review .bars{display:none}.phases.review .chart-review{display:block}
+  .invest-note{font-size:11px;color:var(--t3);line-height:1.45;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+  .cta{display:block;text-align:center;padding:13px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none;background:#fff;color:#080b12;margin-top:12px}.cta:hover{background:#dce6ff}
+  .report-notes{border:1px solid var(--border);border-radius:14px;background:rgba(13,16,23,.62);overflow:hidden}
+  .report-notes summary{list-style:none;cursor:pointer;padding:13px 16px;color:#8e98a8;font-size:11px;font-weight:650;display:flex;justify-content:space-between;align-items:center}
+  .report-notes summary::-webkit-details-marker{display:none}.report-notes summary:after{content:'+';color:#88a5ff;font-size:16px}.report-notes[open] summary:after{content:'−'}
+  .report-notes-body{padding:0 16px 14px;color:#707a8b;font-size:10.5px;line-height:1.5}.report-notes-body p+p{margin-top:8px}
+  .foot{color:var(--t3);font-size:11px;margin-top:24px;line-height:1.6}
+  @media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr);width:100%}.inputs{position:static}.hero{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:680px){body{padding:18px 14px 30px;overflow-x:hidden}h1{font-size:29px;max-width:100%}.tabs{grid-template-columns:minmax(0,1fr)}.hero,.mini{grid-template-columns:minmax(0,1fr)}.hero .num{font-size:34px}.bars{gap:8px}.bar-col{grid-template-rows:24px 130px 44px}.bar-track{height:130px}.tr{grid-template-columns:minmax(0,1fr) auto;gap:10px}.brand{flex-wrap:nowrap}.brand-divider,.report-name{display:none}.gate-pill{margin-left:auto;font-size:9px;max-width:190px;overflow:hidden}.control-row{grid-template-columns:minmax(0,1fr) 82px}.inputs,.output,.card{width:100%;max-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="roi-calculator.html" class="back">← Back to free estimate</a>
+  <div class="brand"><img class="logo-img" src="beam-logo-white.svg" alt="Beam"><span class="brand-divider" aria-hidden="true"></span><span class="report-name">Your business case</span><span class="gate-pill">Detailed estimate</span></div>
+  <div class="prepared">Prepared for you · <span id="wf-name">Invoice processing</span> · based on the numbers from your estimate</div>
+  <h1>What the operating case could look like with Beam</h1>
+
+  <div class="tabs" id="tabs" role="tablist" aria-label="Task type">
+    <button type="button" role="tab" aria-selected="true" class="tab active" data-icp="invoice">Invoice Processing</button>
+    <button type="button" role="tab" aria-selected="false" class="tab" data-icp="rpo">Recruiting / RPO</button>
+    <button type="button" role="tab" aria-selected="false" class="tab" data-icp="bpo">BPO / Operations</button>
+  </div>
+
+  <div class="layout">
+    <div class="card inputs" id="inputs-card">
+      <div class="ctl-title">Your inputs · adjust to re-run</div>
+      <div class="field" id="field-volume"><label id="lbl-volume" for="v-volume">Monthly volume</label><div class="control-row"><input type="range" id="volume" min="200" max="40000" step="100" value="5000" aria-label="Monthly volume"><span class="value-edit"><input type="number" id="v-volume" min="200" max="40000" step="100" value="5000" aria-label="Monthly volume"></span></div></div>
+      <div class="field" id="field-hours"><label for="v-hours"><span class="label-copy">Manual time per item<span class="label-unit"> (hours)</span></span></label><div class="control-row"><input type="range" id="hours" min="0.02" max="1" step="0.01" value="0.20" aria-label="Manual time per item in hours"><span class="value-edit"><input type="number" id="v-hours" min="0.02" max="1" step="0.01" value="0.20" aria-label="Manual time per item in hours"></span></div></div>
+      <div class="field" id="field-auto"><label for="v-auto"><span class="label-copy">Manual effort reduction<span class="label-unit"> (%)</span></span><span class="info" tabindex="0" aria-label="About manual effort reduction">i<span class="info-tip" role="tooltip">The share of hands-on work removed once the automation is fully running, after human review and exception handling.</span></span></label><div class="control-row"><input type="range" id="auto" min="30" max="95" step="5" value="70" aria-label="Manual effort reduction percentage"><span class="value-edit"><input type="number" id="v-auto" min="30" max="95" step="5" value="70" aria-label="Manual effort reduction percentage"></span></div></div>
+      <div class="field" id="field-rework"><label for="v-rework"><span class="label-copy">Average error / rework cost<span class="label-unit"> (USD per item)</span></span><span class="info" tabindex="0" aria-label="About average rework cost">i<span class="info-tip" role="tooltip">Average rework cost spread across every processed item—not the cost of one exception. The model treats 50% as avoidable.</span></span></label><div class="control-row"><input type="range" id="rework" min="0" max="40" step="1" value="3" aria-label="Average error or rework cost in USD per item"><span class="value-edit"><input type="number" id="v-rework" min="0" max="40" step="1" value="3" aria-label="Average error or rework cost in USD per item"></span></div></div>
+      <div class="field" id="field-cost"><label for="v-cost"><span class="label-copy">Fully-loaded cost per hour<span class="label-unit"> (USD)</span></span></label><div class="control-row"><input type="range" id="cost" min="10" max="120" step="5" value="30" aria-label="Fully-loaded hourly cost in USD"><span class="value-edit"><input type="number" id="v-cost" min="10" max="120" step="5" value="30" aria-label="Fully-loaded hourly cost in USD"></span></div></div>
+      <div class="select-wrap"><label for="deployment">Deployment <span class="info" tabindex="0" aria-label="About deployment pricing">i<span class="info-tip" role="tooltip">Planning prices from Beam’s July 2026 enterprise pricing model. Shared tiers start at $2,750/month; a private instance adds $3,500/month. Final pricing is confirmed in a quote.</span></span></label><select id="deployment"><option value="shared">Shared cloud</option><option value="private">Private instance (+$3,500/month)</option></select></div>
+      <div class="card-amber" style="padding:12px 14px;border-radius:10px;margin-top:14px">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:4px">Estimated platform plan</div>
+        <div style="font-size:14px;color:#fff;font-weight:500" id="tier-name">—</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px" id="tier-detail">—</div>
+      </div>
+    </div>
+
+    <div class="output" aria-live="polite">
+      <div class="hero" id="hero">
+        <div class="card card-green h"><div class="num g" id="out-net">—</div><div class="k" id="out-net-label">Year-1 operating benefit after platform + AI</div><div class="s" id="out-net-sub">Before one-time setup and professional services</div><a href="https://beam.ai/see-a-demo?utm_source=roi-calculator&amp;utm_medium=calculator&amp;utm_campaign=roi-calculator" class="review-cta" id="review-cta">Get a complete custom estimate →</a></div>
+        <div class="card card-green h"><div class="num g" id="out-roi">—</div><div class="k">Operating ROI</div><div class="s">Before setup and professional services</div></div>
+        <div class="card card-blue h"><div class="num b" id="out-payback">—</div><div class="k">Operating payback</div><div class="s">Before setup and professional services</div></div>
+      </div>
+
+      <div class="card tbl">
+        <div class="ctl-title" style="margin-bottom:6px">From potential benefit to the Year-1 operating case</div>
+        <div class="tr gross"><span class="lab">Potential annual operating benefit at full run-rate</span><span class="amt" id="t-runrate">—</span></div>
+        <div class="tr sub"><span class="lab">Value of capacity released</span><span class="amt" id="t-labour">—</span></div>
+        <div class="tr sub"><span class="lab">Avoidable error / rework value</span><span class="amt" id="t-error">—</span></div>
+        <div class="tr invest"><span class="lab">Less: value not yet realised during Year-1 rollout</span><span class="amt" id="t-rollout">—</span></div>
+        <div class="tr"><span class="lab">Gross operating benefit realised in Year 1</span><span class="amt" id="t-gross">—</span></div>
+        <div class="tr invest"><span class="lab">Less: estimated platform + AI cost</span><span class="amt" id="t-invest">—</span></div>
+        <div class="tr net"><span class="lab">Year-1 operating benefit after platform + AI</span><span class="amt" id="t-net">—</span></div>
+      </div>
+
+      <div class="mini">
+        <div class="m"><div class="num" id="m-hours">—</div><div class="k">Capacity hours released / year</div></div>
+        <div class="m"><div class="num" id="m-fte">—</div><div class="k">FTE-equivalent capacity—not assumed headcount reduction</div></div>
+        <div class="m"><div class="num" id="m-cpi">—</div><div class="k">All-in cost per item with Beam <span id="m-cpi-today"></span></div></div>
+      </div>
+
+      <div class="card phases">
+        <div class="ctl-title" style="margin-bottom:6px">Cumulative operating value · rollout</div>
+        <div class="chart-review">This scenario needs a custom estimate. Use the action above to confirm the inputs, rollout and complete pricing.</div>
+        <div class="bars" id="bars">
+          <div class="bar-col"><div class="bar-val" id="bv-1">—</div><div class="bar-track"><div class="bar-fill" id="bf-1" style="height:20%"></div></div><div class="bar-lab">Year 1<br>38% realised through ramp</div></div>
+          <div class="bar-col"><div class="bar-val" id="bv-2">—</div><div class="bar-track"><div class="bar-fill" id="bf-2" style="height:60%"></div></div><div class="bar-lab">Year 2<br>90% realised</div></div>
+          <div class="bar-col"><div class="bar-val" id="bv-3">—</div><div class="bar-track"><div class="bar-fill" id="bf-3" style="height:100%"></div></div><div class="bar-lab">Year 3<br>full run-rate</div></div>
+        </div>
+        <a href="https://beam.ai/see-a-demo?utm_source=roi-calculator&amp;utm_medium=calculator&amp;utm_campaign=roi-calculator" class="cta">Get a complete custom estimate →</a>
+      </div>
+      <details class="report-notes">
+        <summary>Assumptions, exclusions and privacy</summary>
+        <div class="report-notes-body">
+          <p><strong>Rollout:</strong> Year 1 assumes a 90-day pilot with no realised benefit, then 25% realisation in months 4–6, 50% in months 7–9 and 75% in months 10–12. Year 2 reaches 90%. <span id="estimate-error">Expected error allowance: —</span></p>
+          <p><strong>Included:</strong> economic value of labour capacity released, avoidable error/rework, estimated platform fees and measured AI task cost. <strong>Excluded:</strong> one-time setup, professional services, dedicated authentication, change management, revenue uplift and cycle-time value. Released capacity is not an assumed headcount reduction or automatic cash saving.</p>
+          <p>This prototype does not submit or store data. Production inputs are saved only after report-form submission.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <p class="foot">Planning estimate, not a proposal or guarantee. Operating ROI = (realised benefit − estimated platform and AI cost) ÷ estimated platform and AI cost. It is not final net ROI because one-time setup and professional services require a scoped quote.</p>
+</div>
+
+<script>
+(function(){
+  var ICPS={
+    invoice:{label:'Invoice processing',volume:5000,hours:0.20,auto:75,cost:35,rework:4,ai:0.70,errorMargin:35,volLabel:'Monthly invoices'},
+    rpo:{label:'Recruiting / RPO',volume:10000,hours:0.12,auto:75,cost:40,rework:0,ai:0.05,errorMargin:15,volLabel:'Monthly CVs / applications'},
+    bpo:{label:'BPO / Operations',volume:10000,hours:0.20,auto:70,cost:30,rework:3,ai:0.12,errorMargin:50,volLabel:'Monthly transactions'}
+  };
+  // Shared platform tiers (enterprise-pricing.md): [maxTasks/mo, $/mo, name]
+  var TIERS=[[5000,2750,'Standard'],[15000,5250,'Growth'],[30000,7500,'Scale']];
+  var FTE_HRS=1840; // 46 wks x 40h (locked 46 weeks)
+  var ERROR_AVOIDED=0.50; // Finance-locked ROI model default.
+  var YEAR1_RAMP=[0,0,0,0.25,0.25,0.25,0.50,0.50,0.50,0.75,0.75,0.75];
+  var YEAR2_REALISATION=0.90;
+  var activeICP='invoice';
+  var PRIVATE_PREMIUM=3500;
+  var el=function(id){return document.getElementById(id);};
+  var qs=new URLSearchParams(location.search);
+  var fmtNum=function(n){return Math.round(n).toLocaleString('en-US');};
+  var fmtUSD=function(n){var neg=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return neg+'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return neg+'$'+fmtNum(n);return neg+'$'+Math.round(n);};
+  var fmtMin=function(h){var m=h*60;return m<1?'<1 min':(m<60?m.toFixed(0)+' min':h.toFixed(1)+' h');};
+  var fmtC=function(n){return '$'+(n<10?n.toFixed(2):Math.round(n).toLocaleString('en-US'));};
+  function flash(id){var n=el(id);if(!n)return;n.classList.add('flash');setTimeout(function(){n.classList.remove('flash');},280);}
+  function tierFor(vol){for(var i=0;i<TIERS.length;i++){if(vol<=TIERS[i][0])return {fee:TIERS[i][1],name:TIERS[i][2],custom:false};}
+    return {fee:null,name:'Custom',custom:true};}
+  function clamp(n,min,max,fallback){return Number.isFinite(n)?Math.min(max,Math.max(min,n)):fallback;}
+  function paramNum(name,min,max,fallback){var raw=qs.get(name);return raw===null||raw===''?fallback:clamp(Number(raw),min,max,fallback);}
+  function paybackMonths(grossMonthly,platformMonthly,aiMonthly){
+    var cumulative=0;
+    for(var month=1;month<=60;month++){
+      var realisation=month<=12?YEAR1_RAMP[month-1]:(month<=24?YEAR2_REALISATION:1);
+      cumulative+=(grossMonthly*realisation)-(platformMonthly+aiMonthly);
+      if(cumulative>=0)return month;
+    }
+    return null;
+  }
+
+  function calc(){
+    var c=ICPS[activeICP];
+    var volume=+el('volume').value,hours=+el('hours').value,autoPct=+el('auto').value/100,cost=+el('cost').value,rework=+el('rework').value;
+    var annualVol=volume*12;
+    var hoursSaved=annualVol*hours*autoPct;
+    var labour=hoursSaved*cost, error=annualVol*rework*ERROR_AVOIDED, gross=labour+error;
+    var t=tierFor(volume);
+    var year1Realisation=YEAR1_RAMP.reduce(function(a,b){return a+b;},0)/12;
+    var year1Benefit=gross*year1Realisation;
+    var aiRunRate=annualVol*c.ai;
+    var deploymentPremium=el('deployment').value==='private'?PRIVATE_PREMIUM:0;
+    var aiYear1=aiRunRate;
+    var platform=t.custom?null:(t.fee+deploymentPremium)*12;
+    var invest=t.custom?null:platform+aiYear1;
+    var net=t.custom?null:year1Benefit-invest;
+    var roi=t.custom?null:(invest>0?net/invest:0);
+    var payback=t.custom?null:paybackMonths(gross/12,t.fee+deploymentPremium,aiRunRate/12);
+    var fte=hoursSaved/FTE_HRS;
+    var cpiBefore=hours*cost+rework;
+    var residualOperatingCpi=(hours*cost*(1-autoPct))+(rework*(1-ERROR_AVOIDED));
+    var cpiAfter=t.custom?null:residualOperatingCpi+((t.fee+deploymentPremium)/volume)+c.ai;
+    var baselineAnnual=cpiBefore*annualVol;
+    var residualAnnual=residualOperatingCpi*annualVol;
+    // cumulative net over 3 years (realisation ramp)
+    var y1=t.custom?null:year1Benefit-invest;
+    var y2=t.custom?null:(gross*YEAR2_REALISATION)-(((t.fee+deploymentPremium)*12)+aiRunRate);
+    var y3=t.custom?null:gross-(((t.fee+deploymentPremium)*12)+aiRunRate);
+    var c1=y1, c2=t.custom?null:y1+y2, c3=t.custom?null:y1+y2+y3;
+    return {volume:volume,hours:hours,autoPct:autoPct,cost:cost,rework:rework,hoursSaved:hoursSaved,labour:labour,error:error,gross:gross,
+      year1Benefit:year1Benefit,tier:t,platform:platform,ai:aiYear1,invest:invest,net:net,roi:roi,payback:payback,fte:fte,cpiBefore:cpiBefore,cpiAfter:cpiAfter,
+      baselineAnnual:baselineAnnual,residualAnnual:residualAnnual,deploymentPremium:deploymentPremium,c1:c1,c2:c2,c3:c3};
+  }
+  function reviewReasons(r,c){
+    var reasons=[];
+    if(r.hours>c.hours*2)reasons.push('manual time');
+    if(r.cost>c.cost*1.75)reasons.push('loaded hourly cost');
+    if(r.autoPct>0.85)reasons.push('effort reduction');
+    if(r.rework>Math.max(c.rework*3,10))reasons.push('rework cost');
+    if(r.volume>Math.max(c.volume*3,30000))reasons.push('monthly volume');
+    return reasons.length>=2?reasons:[];
+  }
+  function update(){
+    var c=ICPS[activeICP],r=calc(),review=reviewReasons(r,c);
+    el('v-volume').value=r.volume;el('v-hours').value=r.hours.toFixed(2);el('v-auto').value=Math.round(r.autoPct*100);el('v-rework').value=r.rework;el('v-cost').value=r.cost;
+    el('wf-name').textContent=c.label;
+    el('tier-name').textContent=review.length?'Custom estimate recommended':(r.tier.custom?'Custom plan · quote required':r.tier.name+' · '+fmtUSD(r.tier.fee+r.deploymentPremium)+'/mo');
+    el('tier-detail').textContent=review.length?'A tailored estimate will account for '+review.join(', ')+'.':'Includes up to '+fmtNum(r.tier.custom?r.volume:TIERS.find(function(t){return t[2]===r.tier.name;})[0])+' tasks/mo · AI task cost included below · setup/services quoted separately';
+    var custom=r.tier.custom||review.length>0;
+    var paybackText=review.length?'Review needed':(r.tier.custom?'Requires quote':(r.payback===null?'No payback ≤5y':r.payback+' mo'));
+    el('hero').classList.toggle('custom-state',custom);
+    document.querySelector('.output').classList.toggle('custom-output',custom);
+    el('inputs-card').classList.toggle('custom-input',custom);
+    [
+      ['field-volume',(review.length>0&&r.volume>Math.max(c.volume*3,30000))||r.tier.custom],
+      ['field-hours',r.hours>c.hours*2],
+      ['field-auto',r.autoPct>0.85],
+      ['field-rework',r.rework>Math.max(c.rework*3,10)],
+      ['field-cost',r.cost>c.cost*1.75]
+    ].forEach(function(item){el(item[0]).classList.toggle('needs-review',item[1]&&(review.length>0||r.tier.custom));});
+    el('out-net').textContent=custom?'Get a custom estimate':fmtUSD(r.net);
+    el('out-net-label').textContent=custom?'This scenario needs a tailored business case':'Year-1 operating benefit after platform + AI';
+    el('out-net-sub').textContent=review.length?'Confirm the highlighted inputs, rollout and complete pricing with Beam.':(r.tier.custom?'Your volume requires custom scope and complete pricing.':'Before one-time setup and professional services');
+    el('review-cta').textContent='Get a complete custom estimate →';
+    el('out-roi').textContent=custom?'—':Math.round(r.roi*100)+'%';el('out-payback').textContent=paybackText;
+    el('out-net').style.color=(!custom&&r.net<0)?'var(--amber)':'var(--green)';
+    el('t-runrate').textContent=review.length?'Custom estimate':fmtUSD(r.gross);
+    el('t-labour').textContent=review.length?'Custom estimate':fmtUSD(r.labour);
+    el('t-error').textContent=review.length?'Custom estimate':fmtUSD(r.error);
+    el('t-rollout').textContent=review.length?'Custom estimate':fmtUSD(-(r.gross-r.year1Benefit));
+    el('t-gross').textContent=review.length?'Custom estimate':fmtUSD(r.year1Benefit);
+    el('t-invest').textContent=custom?'Custom quote':fmtUSD(r.invest);el('t-net').textContent=custom?'Requires quote':fmtUSD(r.net);
+    el('m-hours').textContent=review.length?'Review needed':fmtNum(r.hoursSaved);el('m-fte').textContent=review.length?'—':r.fte.toFixed(1);el('m-cpi').textContent=custom?(review.length?'Review needed':'Custom quote'):fmtC(r.cpiAfter);el('m-cpi-today').textContent='· today '+fmtC(r.cpiBefore);
+    el('estimate-error').textContent='Expected error allowance: ±'+c.errorMargin+'%.'+(r.autoPct>0.85?' This effort-reduction scenario is above the validated default and needs task-specific confirmation.':'');
+    document.querySelector('.phases').classList.toggle('review',review.length>0);
+    var mx=custom?1:Math.max(r.c1,r.c2,r.c3,1);
+    el('bv-1').textContent=custom?'—':fmtUSD(r.c1);el('bv-2').textContent=custom?'—':fmtUSD(r.c2);el('bv-3').textContent=custom?'—':fmtUSD(r.c3);
+    el('bf-1').style.height=custom?'3%':Math.max(3,Math.max(0,r.c1)/mx*100)+'%';el('bf-2').style.height=custom?'3%':Math.max(3,Math.max(0,r.c2)/mx*100)+'%';el('bf-3').style.height=custom?'3%':Math.max(3,Math.max(0,r.c3)/mx*100)+'%';
+    flash('hero');
+  }
+  function setICP(key,fromParams){
+    activeICP=key;var c=ICPS[key];
+    el('volume').value=fromParams?paramNum('vol',200,40000,c.volume):c.volume;
+    el('hours').value=fromParams?paramNum('hrs',0.02,1,c.hours):c.hours;
+    el('auto').value=fromParams?paramNum('auto',30,95,c.auto):c.auto;
+    el('cost').value=fromParams?paramNum('cost',10,120,c.cost):c.cost;
+    el('rework').value=fromParams?paramNum('rework',0,40,c.rework):c.rework;
+    document.querySelectorAll('#tabs .tab').forEach(function(t){var selected=t.dataset.icp===key;t.classList.toggle('active',selected);t.setAttribute('aria-selected',String(selected));});
+    el('lbl-volume').textContent=c.volLabel;
+    update();
+  }
+  ['volume','hours','auto','cost','rework'].forEach(function(id){el(id).addEventListener('input',update);});
+  el('deployment').addEventListener('change',update);
+  [
+    ['v-volume','volume'],['v-hours','hours'],['v-auto','auto'],['v-rework','rework'],['v-cost','cost']
+  ].forEach(function(pair){
+    var number=el(pair[0]),range=el(pair[1]);
+    number.addEventListener('input',function(){
+      if(number.value==='')return;
+      var value=+number.value;if(!Number.isFinite(value))return;
+      range.value=Math.min(+range.max,Math.max(+range.min,value));
+    });
+    number.addEventListener('change',function(){
+      if(number.value==='')number.value=range.value;
+      range.value=Math.min(+range.max,Math.max(+range.min,+number.value));
+      update();
+    });
+    number.addEventListener('keydown',function(e){if(e.key==='Enter')number.blur();});
+  });
+  document.querySelectorAll('#tabs .tab').forEach(function(t){t.addEventListener('click',function(){setICP(t.dataset.icp,false);});});
+  var startICP=qs.get('icp'); if(!ICPS[startICP])startICP='invoice';
+  setICP(startICP,true);
+})();
+</script>
+</body>
+</html>
