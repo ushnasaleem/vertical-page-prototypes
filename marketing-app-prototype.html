@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marketing Intelligence Workspace — Prototype</title>
+  <style>
+    :root { --ink:#18181b; --muted:#71717a; --line:#e4e4e7; --soft:#fafafa; --blue:#2563eb; --violet:#7c3aed; }
+    * { box-sizing:border-box; } body { margin:0; background:#fff; color:var(--ink); font:14px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .shell { min-height:100vh; display:grid; grid-template-columns:240px 1fr; }
+    aside { background:#fafafa; border-right:1px solid var(--line); padding:20px 12px; }
+    .brand { display:flex; gap:9px; align-items:center; font-weight:700; padding:8px 10px 22px; }
+    .mark { width:22px; height:22px; border-radius:7px; background:linear-gradient(135deg,#7c3aed,#2563eb); }
+    .workspace { color:#52525b; font-size:12px; padding:9px 10px; border:1px solid var(--line); border-radius:8px; margin-bottom:18px; }
+    .nav-label { color:#a1a1aa; font-size:11px; font-weight:700; letter-spacing:.06em; padding:0 10px 7px; text-transform:uppercase; }
+    .nav a { display:block; text-decoration:none; color:#52525b; padding:9px 10px; border-radius:7px; margin:2px 0; }
+    .nav a.active { background:#ede9fe; color:#5b21b6; font-weight:600; }
+    main { padding:34px 42px 60px; max-width:1550px; overflow:hidden; }
+    .top { display:flex; justify-content:space-between; gap:20px; align-items:start; }
+    h1 { font-size:25px; letter-spacing:-.03em; margin:0 0 7px; } .sub { color:var(--muted); margin:0; }
+    .range { border:1px solid var(--line); border-radius:8px; padding:9px 12px; color:#52525b; white-space:nowrap; }
+    .notice { margin:23px 0; padding:10px 13px; border-radius:8px; color:#854d0e; background:#fffbeb; border:1px solid #fde68a; font-size:12px; }
+    .metrics { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    .metric { border:1px solid var(--line); border-radius:10px; padding:15px; min-height:95px; } .metric p { margin:0; color:var(--muted); font-size:12px; } .metric strong { display:block; margin:8px 0 3px; font-size:25px; letter-spacing:-.04em; } .metric small { color:var(--muted); }
+    .metric.good strong { color:#047857; }.metric.watch strong { color:#a16207; }.metric.todo strong { color:#6d28d9; }
+    .card { margin-top:25px; border:1px solid var(--line); border-radius:11px; overflow:hidden; } .card-header { padding:17px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; } h2 { font-size:16px; margin:0; } .card-header p { color:var(--muted); margin:4px 0 0; font-size:12px; }.badge { background:#f4f4f5; border-radius:999px; padding:5px 9px; color:#52525b; font-size:12px; }
+    .table-wrap { overflow:auto; max-height:355px; } table { width:100%; min-width:1080px; border-collapse:collapse; text-align:left; } th { position:sticky; top:0; background:#fff; color:#71717a; font-size:11px; font-weight:600; letter-spacing:.02em; } th,td { border-bottom:1px solid var(--line); padding:13px 16px; white-space:nowrap; } td:last-child { white-space:normal; min-width:290px; } .link { color:var(--blue); text-decoration:none; } .pill { display:inline-block; border-radius:999px; padding:4px 8px; font-size:12px; font-weight:600; } .scheduled { color:#0369a1; background:#e0f2fe; }.completed { color:#047857; background:#d1fae5; }.high { color:#047857; background:#d1fae5; }.medium { color:#a16207; background:#fef3c7; }.pending { color:#6d28d9; background:#ede9fe; }
+    .foot { margin-top:18px; color:#a1a1aa; font-size:11px; }
+    @media (max-width:850px) { .shell { grid-template-columns:1fr; } aside { display:none; } main { padding:24px 18px; } .metrics { grid-template-columns:repeat(2,1fr); } .top { display:block; }.range { display:inline-block; margin-top:16px; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><span class="mark"></span> Beam Marketing</div>
+      <div class="workspace">Ushna's Workspace ⌄</div>
+      <div class="nav"><div class="nav-label">Workspace</div><a href="#">Overview</a><a class="active" href="#inbound">Inbound leads</a><a href="#">People</a><a href="#">Data health</a><div class="nav-label" style="margin-top:20px">Saved views</div><a href="#">Weekly pipeline</a><a href="#">Team inbound overview</a></div>
+    </aside>
+    <main>
+      <div class="top"><div><h1>Inbound lead progression</h1><p class="sub">A Fillout-to-HubSpot view of meeting progression and inbound follow-up.</p></div><div class="range">▣ Selected date range</div></div>
+      <div class="notice">Prototype only — sample data is anonymized. Live CRM and form data are not published here.</div>
+      <section class="metrics"><div class="metric"><p>Inbound leads</p><strong>—</strong><small>Selected date range</small></div><div class="metric"><p>Matched in HubSpot</p><strong>—</strong><small>of inbound</small></div><div class="metric"><p>Meetings in motion</p><strong>—</strong><small>conversion</small></div><div class="metric good"><p>High priority</p><strong>—</strong><small>of inbound</small></div><div class="metric todo"><p>Needs research</p><strong>—</strong><small>of inbound</small></div></section>
+      <section class="card" id="inbound"><div class="card-header"><div><h2>Meetings in motion</h2><p>Inbound leads with an associated meeting in the selected period.</p></div><span class="badge">CRM matched</span></div><div class="table-wrap"><table><thead><tr><th>Email</th><th>Submitted</th><th>Source page</th><th>First meeting</th><th>Latest meeting</th><th>Meeting status</th><th>Owner / AE</th><th>Lead status</th><th>HubSpot</th></tr></thead><tbody><tr><td>lead@company.example</td><td>Selected period</td><td><a class="link" href="#">/see-a-demo</a></td><td>—</td><td>—</td><td><span class="pill scheduled">Scheduled</span></td><td>Assigned owner</td><td>Qualified</td><td><a class="link" href="#">Open contact ↗</a></td></tr><tr><td>contact@business.example</td><td>Selected period</td><td><a class="link" href="#">/platform</a></td><td>—</td><td>—</td><td><span class="pill completed">Completed</span></td><td>Assigned owner</td><td>Opportunity</td><td><a class="link" href="#">Open contact ↗</a></td></tr></tbody></table></div></section>
+      <section class="card"><div class="card-header"><div><h2>Inbound follow-up candidates</h2><p>Browser-researched business leads without a booked meeting.</p></div><span class="badge">Research queue</span></div><div class="table-wrap"><table><thead><tr><th>Lead</th><th>Company</th><th>Company size</th><th>Priority</th><th>Why Beam is a fit</th></tr></thead><tbody><tr><td>lead@company.example</td><td>Example services business</td><td>Verified band</td><td><span class="pill high">High priority</span></td><td>Company-specific workflow rationale and public evidence appear here after review.</td></tr><tr><td>contact@business.example</td><td>Example operations company</td><td>Not verified</td><td><span class="pill pending">Needs research</span></td><td>Unverified records stay explicitly pending; the prototype does not infer data.</td></tr></tbody></table></div></section>
+      <p class="foot">Marketing Intelligence Workspace · static prototype for review</p>
+    </main>
+  </div>
+</body>
+</html>
