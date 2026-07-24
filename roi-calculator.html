@@ -26,6 +26,11 @@
   .tab{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--border);color:#8e96a4;font-weight:650;font-size:13px;cursor:pointer;text-align:center;transition:all .2s}
   .tab:hover{border-color:rgba(111,149,255,.42);color:#fff;background:rgba(255,255,255,.04)}
   .tab.active{background:#f5f7fb;border-color:#f5f7fb;color:#0a0c11;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .processes{display:flex;align-items:center;gap:7px;min-height:29px;margin:-5px 0 14px;color:var(--t3);font-size:10px}
+  .process-label{letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-right:2px}
+  .process{display:none;padding:5px 9px;border:1px solid rgba(255,255,255,.10);border-radius:999px;background:rgba(255,255,255,.035);color:#dce2ec;font:inherit;font-size:11px;font-weight:600}
+  .process.show{display:inline-flex}.process.active{border-color:rgba(110,149,255,.48);background:rgba(71,118,255,.12);color:#c7d5ff}
+  .process:disabled{opacity:.48;cursor:not-allowed}
   .tab:focus-visible,.cta:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #9db5ff;outline-offset:3px}
   .layout{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:14px;align-items:start;min-width:0}
   .card{min-width:0;background:linear-gradient(180deg,rgba(16,20,29,.94),rgba(10,13,19,.96));border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
@@ -102,9 +107,16 @@
   </div>
 
   <div class="tabs" id="tabs" role="tablist" aria-label="Task type">
-    <button type="button" role="tab" aria-selected="true" class="tab active" data-icp="invoice">Invoice Processing</button>
+    <button type="button" role="tab" aria-selected="true" class="tab active" data-icp="invoice">Finance &amp; Accounting</button>
     <button type="button" role="tab" aria-selected="false" class="tab" data-icp="rpo">Recruiting / RPO</button>
     <button type="button" role="tab" aria-selected="false" class="tab" data-icp="bpo">BPO / Operations</button>
+  </div>
+  <div class="processes" aria-label="Available processes">
+    <span class="process-label">Process</span>
+    <button type="button" class="process active" data-for="invoice">Invoice processing</button>
+    <button type="button" class="process" data-for="invoice" disabled title="Coming soon">Collections · coming soon</button>
+    <button type="button" class="process active" data-for="rpo">Candidate screening</button>
+    <button type="button" class="process active" data-for="bpo">Transaction processing</button>
   </div>
 
   <div class="layout">
@@ -233,6 +245,7 @@
     activeICP=key;var c=ICPS[key];
     el('volume').value=c.volume;el('hours').value=c.hours;el('auto').value=c.auto;el('cost').value=c.cost;el('rework').value=c.rework;
     document.querySelectorAll('#tabs .tab').forEach(function(t){var selected=t.dataset.icp===key;t.classList.toggle('active',selected);t.setAttribute('aria-selected',String(selected));});
+    document.querySelectorAll('.process').forEach(function(p){p.classList.toggle('show',p.dataset.for===key);});
     el('lbl-volume').textContent=c.volLabel;el('hint-volume').textContent=c.volHint;
     update();
   }
