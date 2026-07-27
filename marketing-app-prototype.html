@@ -24,7 +24,7 @@
     .metric { border:1px solid var(--line); border-radius:10px; padding:15px; min-height:95px; } .metric p { margin:0; color:var(--muted); font-size:12px; } .metric strong { display:block; margin:8px 0 3px; font-size:25px; letter-spacing:-.04em; } .metric small { color:var(--muted); }
     .metric.good strong { color:#047857; }.metric.watch strong { color:#a16207; }.metric.todo strong { color:#6d28d9; }
     .card { margin-top:25px; border:1px solid var(--line); border-radius:11px; overflow:hidden; } .card-header { padding:17px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; } h2 { font-size:16px; margin:0; } .card-header p { color:var(--muted); margin:4px 0 0; font-size:12px; }.badge { background:#f4f4f5; border-radius:999px; padding:5px 9px; color:#52525b; font-size:12px; }
-    .table-wrap { overflow:auto; max-height:355px; } table { width:100%; min-width:1080px; border-collapse:collapse; text-align:left; } th { position:sticky; top:0; background:#fff; color:#71717a; font-size:11px; font-weight:600; letter-spacing:.02em; } th,td { border-bottom:1px solid var(--line); padding:13px 16px; white-space:nowrap; } td:last-child { white-space:normal; min-width:290px; } .link { color:var(--blue); text-decoration:none; } .pill { display:inline-block; border-radius:999px; padding:4px 8px; font-size:12px; font-weight:600; } .scheduled { color:#0369a1; background:#e0f2fe; }.completed { color:#047857; background:#d1fae5; }.high { color:#047857; background:#d1fae5; }.medium { color:#a16207; background:#fef3c7; }.pending { color:#6d28d9; background:#ede9fe; }
+    .table-wrap { overflow:auto; max-height:355px; } table { width:100%; min-width:1080px; border-collapse:collapse; text-align:left; } th { position:sticky; top:0; background:#fff; color:#71717a; font-size:11px; font-weight:600; letter-spacing:.02em; } th,td { border-bottom:1px solid var(--line); padding:13px 16px; white-space:nowrap; } td:last-child { white-space:normal; min-width:290px; } .link { color:var(--blue); text-decoration:none; } .pill { display:inline-block; border-radius:999px; padding:4px 8px; font-size:12px; font-weight:600; } .scheduled { color:#0369a1; background:#e0f2fe; }.completed { color:#047857; background:#d1fae5; }.high { color:#047857; background:#d1fae5; }.medium { color:#a16207; background:#fef3c7; }.low { color:#52525b; background:#f4f4f5; }.pending { color:#6d28d9; background:#ede9fe; }
     .foot { margin-top:18px; color:#a1a1aa; font-size:11px; }
     @media (max-width:850px) { .shell { grid-template-columns:1fr; } aside { display:none; } main { padding:24px 18px; } .metrics { grid-template-columns:repeat(2,1fr); } .top { display:block; }.range { display:inline-block; margin-top:16px; } }
   </style>
@@ -86,5 +86,85 @@
       <p class="foot">Marketing Intelligence Workspace · static prototype for review</p>
     </main>
   </div>
+  <script>
+    const meetings = [
+      ["umer@alemadi.com","Jul 26, 2026","/lp/finance","Jul 27, 2026","Jul 27, 2026","Scheduled","Karim Daoui","Data Enrichment Needed"],
+      ["aj@ajrrics.com","Jul 26, 2026","/lp/hr-rpo-recruitment","Jul 27, 2026","Jul 27, 2026","Scheduled","Mo Bekdache","Qualified"],
+      ["martin.hao@joinsocialcare.co.uk","Jul 24, 2026","/see-a-demo","Jul 28, 2026","Jul 28, 2026","Scheduled","Derya Firat","Data Enrichment Needed"],
+      ["james@rammech.com","Jul 23, 2026","/see-a-demo","Jul 28, 2026","Jul 28, 2026","Scheduled","Mo Bekdache","Data Enrichment Needed"],
+      ["juliana.marinho@mytalentscout.de","Jul 22, 2026","/de/see-a-demo","Jul 24, 2026","Jul 24, 2026","Scheduled","Derya Firat","Data Enrichment Needed"],
+      ["elfatih@diyarmafaz.com","Jul 21, 2026","/integrations/gigasheet","Jul 23, 2026","Jul 23, 2026","Scheduled","Karim Daoui","Qualified"],
+      ["felix.adam@ergosoftware.de","Jul 21, 2026","/de/lp/hr-rpo-recruitment","Jul 23, 2026","Jul 23, 2026","Scheduled","Derya Firat","Qualified"],
+      ["ayoub.bari@moca.gov.ae","Jul 20, 2026","/see-a-demo","Jul 22, 2026","Jul 27, 2026","Scheduled","Mo Bekdache","Qualified"],
+      ["j.ehsan@acgc.com.sa","Jul 20, 2026","/","Jul 23, 2026","Jul 23, 2026","Completed","Karim Daoui","Qualified"],
+      ["johannes@alphoraholdings.com","Jul 20, 2026","/","Jul 21, 2026","Jul 21, 2026","Completed","Mo Bekdache","Qualified"],
+      ["marjoleinvanderaar@trubendorffer.nl","Jul 20, 2026","/","Jul 21, 2026","Jul 21, 2026","Completed","Mo Bekdache","Qualified"],
+      ["vaibhav.s@sharaf.ae","Jul 20, 2026","/lp/hr-rpo-recruitment","Jul 22, 2026","Jul 22, 2026","Completed","Mo Bekdache","Data Enrichment Needed"]
+    ];
+
+    const followUps = [
+      ["patricia.barriooton@riverty.com","Jul 24, 2026","Riverty","riverty.com","~5k","High priority","Collections, payment reconciliation, customer case handling, and finance operations."],
+      ["adam.stowe@meemic.com","Jul 25, 2026","Meemic Insurance","meemic.com","200–500","High priority","Claims intake, policy documents, customer service routing, and Salesforce-connected workflows."],
+      ["sasarhan@moh.gov.sa","Jul 23, 2026","Saudi Ministry of Health","moh.gov.sa","100k+","High priority","Credential checks, recruitment documents, correspondence, healthcare case intake, and routing."],
+      ["panosi9930@apdtax.com","Jul 26, 2026","APD Tax","apdtax.com","Not verified","Medium priority","Tax-document intake, extraction, validation, client follow-up, and finance workflow automation."],
+      ["sandy@foliagardens.com","Jul 24, 2026","Folia Gardens","foliagardens.com","Not verified","Medium priority","Quote intake, scheduling, purchasing, customer requests, and invoice processing."],
+      ["tims@titanmechservices.com","Jul 24, 2026","Titan Mechanical Services","titanmechservices.com","Not verified","Medium priority","Work-order intake, dispatch, estimates, vendor documents, and invoice processing."],
+      ["reza@newpol.au","Jul 23, 2026","Newpol Construction","newpol.au","50–200","Medium priority","Subcontractor invoices, PO matching, change orders, RFIs, and project-document workflows."],
+      ["23951a050p@iare.ac.in","Jul 23, 2026","IARE","iare.ac.in","Not verified","Medium priority","Student and vendor document intake, approvals, invoice processing, and operational case routing."],
+      ["benvin.patrick@bcsdschools.net","Jul 22, 2026","Berkeley County School District","bcsdschools.net","Not verified","Medium priority","Student-service forms, HR documents, procurement, invoice handling, and request routing."],
+      ["kerry.cooper@rezmeetings.com","Jul 22, 2026","RezMeetings","rezmeetings.com","1–10","Medium priority","Venue requests, attendee data, supplier coordination, invoice handling, and client support."],
+      ["nirmal@swiffylabs.com","Jul 22, 2026","SwiffyLabs","swiffylabs.com","Not verified","Medium priority","Client onboarding, project intake, document handling, QA, and operational service delivery."],
+      ["elliot@rawiron.au","Jul 21, 2026","Raw Iron Rigging","rawiron.au","10–50","Medium priority","Order and supplier-document handling, invoice/PO matching, service intake, and operations support."],
+      ["brian.yang@lmg.broker","Jul 20, 2026","LMG","lmg.broker","Not verified","Medium priority","Broker document intake, compliance checks, reconciliation, and finance workflow automation."],
+      ["kadreev@bwebgroup.com","Jul 24, 2026","BWeb Group","bwebgroup.com","Not verified","Medium priority","Client intake, campaign and project operations, approvals, reporting, and invoice workflows."],
+      ["info@technocore.gr","Jul 26, 2026","Technocore","technocore.gr","Not verified","Low priority","Technology provider profile; potential partner rather than a core workflow buyer."],
+      ["annie@sema4.ai","Jul 24, 2026","Sema4.ai","sema4.ai","Not verified","Low priority","AI/software vendor; do not pursue without a strategic-partner exception."],
+      ["betseyfluttering@web-library.net","Jul 24, 2026","Web Library","web-library.net","Not verified","Low priority","Low-confidence identity and unclear operating workflow; deprioritize."],
+      ["work@ikhsantrx.web.ud","Jul 24, 2026","—","—","Not verified","Low priority","Invalid domain; treat as a test or unusable submission."],
+      ["cvivarelli@atlassian.com","Jul 24, 2026","Atlassian","atlassian.com","10k+","Low priority","Software vendor; potential ecosystem contact rather than a core workflow buyer."],
+      ["vivek@productbyvivek.com","Jul 24, 2026","Product by Vivek","productbyvivek.com","Not verified","Low priority","Solo product/consulting profile with limited workflow volume."],
+      ["mercadeo@castordata.com.co","Jul 23, 2026","Castor Data","castordata.com.co","Not verified","Low priority","Data/software provider profile; potential partner rather than a core buyer."],
+      ["imniotgivingemails@smka.com","Jul 22, 2026","SMKA","smka.com","Not verified","Low priority","Low-confidence identity and no verified high-volume workflow."],
+      ["margrate.westover@inboxorigin.com","Jul 22, 2026","Inbox Origin","inboxorigin.com","Not verified","Low priority","Low-confidence identity and no accessible source-backed company context."],
+      ["eduardo@pelotis.es","Jul 21, 2026","Pelotis","pelotis.es","Not verified","Low priority","GTM/agency profile; do not pursue without a partner exception."],
+      ["sadfs@easdf.sdfa","Jul 21, 2026","—","—","Not verified","Low priority","Invalid domain; treat as a test submission."],
+      ["rebecca.liu@bytedance.com","Jul 21, 2026","ByteDance","bytedance.com","150k+","Low priority","Large software vendor; strategic ecosystem contact, not a core target account."],
+      ["alex.postiglione@coreitech.co.uk","Jul 20, 2026","Coreitech","coreitech.co.uk","Not verified","Low priority","IT services/provider profile; likely partner motion rather than core buyer."],
+      ["jfiwagkdzz@aipm9527.online","Jul 20, 2026","—","aipm9527.online","Not verified","Low priority","No accessible company identity; likely disposable or low-quality submission."]
+    ];
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[character]));
+    const meetingBody = document.querySelector("#inbound tbody");
+    meetingBody.innerHTML = meetings.map(row => `<tr>${row.map((value,index) => index === 2 ? `<td><a class="link" href="https://beam.ai${escapeHtml(value)}">${escapeHtml(value)}</a></td>` : index === 5 ? `<td><span class="pill ${value === "Completed" ? "completed" : "scheduled"}">${escapeHtml(value)}</span></td>` : `<td>${escapeHtml(value)}</td>`).join("")}</tr>`).join("");
+
+    const followUpCard = document.querySelectorAll(".card")[1];
+    const followUpBody = followUpCard.querySelector("tbody");
+    const priorityOrder = {"High priority":0,"Medium priority":1,"Low priority":2};
+    followUps.sort((left,right) => priorityOrder[left[5]] - priorityOrder[right[5]] || left[1].localeCompare(right[1]));
+    followUpBody.innerHTML = followUps.map(row => `<tr>${row.map((value,index) => index === 3 ? `<td>${value === "—" ? "—" : `<a class="link" href="https://${escapeHtml(value)}">${escapeHtml(value)} ↗</a>`}</td>` : index === 5 ? `<td><span class="pill ${value === "High priority" ? "high" : value === "Medium priority" ? "medium" : "low"}">${escapeHtml(value)}</span></td>` : `<td>${escapeHtml(value)}</td>`).join("")}</tr>`).join("");
+
+    document.querySelector("#inbound .card-header p").textContent = "12 Jul 20–26 inbound leads have HubSpot meetings: 8 scheduled and 4 completed.";
+    document.querySelector("#inbound .badge").textContent = "8 scheduled · 4 completed";
+    followUpCard.querySelector(".card-header p").textContent = "All 28 Jul 20–26 non-meeting leads have been researched and ranked High → Medium → Low.";
+    followUpCard.querySelector(".badge").textContent = "3 high · 11 medium · 14 low";
+
+    const metrics = [...document.querySelectorAll(".metric")];
+    const metricData = [
+      ["Inbound leads","42","12 meetings · 28 follow-up · 2 excluded"],
+      ["CRM-confirmed","35","Jul 20–26 matched contacts"],
+      ["Meetings in motion","12","8 scheduled · 4 completed"],
+      ["High priority","3","Researched follow-up accounts"],
+      ["Medium priority","11","Researched follow-up accounts"],
+      ["Low priority","14","Deprioritized after research"],
+      ["Needs research","0","All weekly leads ranked"]
+    ];
+    metrics.forEach((metric,index) => {
+      const data = metricData[index];
+      if (!data) return;
+      metric.querySelector("p").textContent = data[0];
+      metric.querySelector("strong").textContent = data[1];
+      metric.querySelector("small").textContent = data[2];
+    });
+  </script>
 </body>
 </html>
