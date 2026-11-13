@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Creators · Beam GTM Intelligence</title>
+  <link rel="stylesheet" href="creator-engine.css">
+  <script defer src="creator-engine.js"></script>
+</head>
+<body>
+  <div class="mi-shell">
+    <aside class="mi-sidebar">
+      <div class="mi-brand"><span class="mi-logo" aria-hidden="true">B</span><div><strong>Beam GTM</strong><small>Intelligence</small></div></div>
+      <nav class="mi-navigation" aria-label="Creators workspace">
+        <p class="mi-group">Marketing</p>
+        <button type="button" id="ce-workflow-view" aria-current="page">Creators</button>
+        <button type="button" data-go="results">Outreach dashboard</button>
+      </nav>
+    </aside>
+    <div class="mi-main">
+      <header class="mi-header">
+        <span class="mi-breadcrumb-separator">Marketing</span><span class="mi-breadcrumb-separator" aria-hidden="true">›</span>
+        <strong id="mi-view-title">Creators</strong><span class="mi-context">Prototype · demo data</span>
+      </header>
+<div id="creator-engine-walkthrough">
+  <nav class="ce-nav" aria-label="Creator workflow">
+    <button type="button" data-go="icps">1. Select ICP</button>
+    <button type="button" data-go="creators" disabled>2. Vetted creators</button>
+    <button type="button" data-go="contact" disabled>3. Contact</button>
+  </nav>
+  <main>
+    <section id="ce-icps">
+      <div class="ce-hero"><h2>Select an ICP</h2><p>Pick the buyers you want to reach.</p></div>
+      <div id="ce-library" class="ce-tiles"></div>
+      <button type="button" class="ce-outline" id="ce-add">+ Add a new ICP</button>
+    </section>
+    <section id="ce-creators" hidden></section>
+    <section id="ce-contact" hidden></section>
+    <section id="ce-results" hidden></section>
+  </main>
+  <dialog id="ce-intake" aria-labelledby="ce-intake-title">
+    <div class="ce-dialog-head"><h2 id="ce-intake-title">Add a new ICP</h2><button type="button" class="ce-outline" data-close="intake">Close</button></div>
+    <ol class="ce-instructions"><li>Download the template and fill in the Value column.</li><li>Upload your completed TSV. Fix any flagged fields and upload it again.</li><li>Review the positioning, then approve the ICP to add it to the list.</li></ol>
+    <div class="ce-actions"><a id="ce-download" class="ce-outline" download="beam-icp-template.tsv">Download template</a><button type="button" class="ce-outline" id="ce-example">Try a sample</button></div>
+    <details><summary>View template text</summary><textarea id="ce-template-text" aria-label="ICP template text" readonly></textarea></details>
+    <label class="ce-field" for="ce-file">Completed ICP file</label><input id="ce-file" type="file" accept=".tsv,text/tab-separated-values">
+    <div id="ce-validation" aria-live="polite"></div>
+    <button type="button" class="ce-primary" id="ce-approve" disabled>Approve and add ICP</button>
+  </dialog>
+  <dialog id="ce-detail" aria-labelledby="ce-detail-title"><div id="ce-detail-content"></div></dialog>
+  <dialog id="ce-outcome" aria-labelledby="ce-outcome-title"><div id="ce-outcome-content"></div></dialog>
+</div>
+      <a class="mi-back" href="./">Back to Beam Page Prototypes</a>
+    </div>
+  </div>
+</body>
+</html>
