@@ -215,6 +215,13 @@
   const field = (label,html) => '<div><dt>' + escape(label) + '</dt><dd>' + html + '</dd></div>';
   const data = html => '<dl class="ce-data">' + html + '</dl>';
   const fold = (label,html) => '<details><summary>' + escape(label) + '</summary>' + html + '</details>';
+  const teamQuestions = questions => fold('Open questions for the team','<ul class="ce-instructions">' +
+    questions.map(([owner,question]) => '<li><strong>' + escape(owner) + '</strong> · ' + escape(question) + '</li>').join('') + '</ul>');
+  find('intake-questions').innerHTML = teamQuestions([
+    ['Rabia','What would make a BPO or RPO ICP too vague to use? Which real example should we test?'],
+    ['Faiz','Which conflicts can we flag automatically? How do we store approvals and revisions?'],
+    ['Ushna + Rabia','Who signs off on positioning for new ICPs and later edits?']
+  ]);
   const heading = (title,sub) => '<div class="ce-hero"><h2>' + escape(title) + '</h2><p>' + escape(sub) + '</p></div>';
   const template = values => ['Field\tValue\tGuidance',...schema.map(([key,fallback,guide]) => [key,values?.[key] ?? fallback,guide].join('\t'))].join('\n') + '\n';
   const demoIcp = {
@@ -240,7 +247,7 @@
   const quoteMode = () => quoteModes.has(active + ':' + selected);
   const recordKey = (icp,candidate,editorialQuote) => [icp,candidate.id,editorialQuote ? 'quote' : 'placement'].join(':');
   const newRecord = (icp,candidate,editorialQuote) => ({
-    icp,candidate,editorialQuote,stage:'draft',channel:null,draft:null,subject:null,reply:'',quote:'',publishedUrl:'',
+    icp,candidate,editorialQuote,stage:'draft',channel:null,draft:null,subject:null,brief:null,reply:'',quote:'',publishedUrl:'',
     token:null,tests:[],events:[],recap:false,sentAt:null,followUpAt:null,updatedAt:Date.now(),meetings:0
   });
   const state = () => {
@@ -362,12 +369,17 @@
     find('creators').innerHTML = intro +
       '<div class="ce-summary"><h3>Top three</h3><small>Fit / 100 · 75–100 Strong · 50–74 Medium · 0–49 Low</small></div>' +
       '<div class="ce-top">' + list.slice(0,3).map((candidate,index) => '<button type="button" class="ce-tile" data-action="detail" data-value="' + candidate.id + '"><small>#' + (index + 1) + ' · ' + escape(candidate.audienceLabel) + '</small><span><strong>' + escape(candidate.name) + '</strong></span>' + meter(candidate) + '</button>').join('') + '</div>' +
-      '<div class="ce-summary"><h3>All vetted placements · ' + list.length + '</h3><small>Sources checked · buyer overlap varies</small></div>' +
+      '<div class="ce-summary"><h3>All vetted placements · ' + list.length + '</h3><small>Snapshot ranked by fit · public reach shown in source units</small></div>' +
       '<div class="ce-list" role="list" aria-label="Vetted placements"><div class="ce-row ce-labels" aria-hidden="true"><div>Creator / placement</div><div>Fit</div><div>Public reach</div><div>Deliverable / rate</div></div>' +
       list.map(candidate => '<div class="ce-row" role="listitem"><div><button type="button" data-action="detail" data-value="' + candidate.id + '">' + escape(candidate.name) + '</button><small>' + escape(candidate.placement) + '</small></div><div>' + meter(candidate) + '</div><div>' + escape(candidate.reach) + '</div><div>' + escape(candidate.deliverable) + '<small>' + escape(rate(candidate)) + '</small></div></div>').join('') + '</div>' +
       fold('Search trail and weekly updates',coverage + '<p class="ce-note">Weekly discovery and topic alerts are planned. Topic watch: ' + escape(profile.topic[0]) + ' · ' + link(profile.topic[2],'Source') + ' · ' + link(profile.topic[3],'Source') + '</p>' +
       action('Replay weekly refresh','weekly') + ' ' + action('Replay topic discovery','topic') +
-      '<p><small>Public web, publisher pages and event agendas. Clay checks people and companies. Content Intelligence supplies topic signals.</small></p>');
+      '<p><small>Public web, publisher pages and event agendas. Clay checks people and companies. Content Intelligence supplies topic signals.</small></p>') +
+      teamQuestions([
+        ['Rabia','Which placement would you pursue? What audience evidence, sample or rate context would change your choice?'],
+        ['Faiz','Which sources can run live? Where does Clay help, and which metrics, periods and scopes make reach comparable?'],
+        ['Faiz + Rabia','What topic signal should expand discovery, and which evidence changes should a weekly refresh surface?']
+      ]);
   }
 
   function renderDetail(candidate) {
@@ -377,7 +389,7 @@
     find('detail-content').innerHTML = '<div class="ce-dialog-head"><h2 id="ce-detail-title">' + escape(candidate.name) + '</h2><button type="button" class="ce-outline" data-close="detail">Close</button></div><p class="ce-muted">' + escape(candidate.placement) + '</p>' + meter(candidate) +
       '<div class="ce-split"><div class="ce-tile"><h3>Audience and reach</h3>' + data(field('Audience evidence · ' + result.audience + '/4',escape(candidate.fit)) + field('Public reach · ' + candidate.reachGrade + '/3 evidence',escape(candidate.reach + '. ' + candidate.reachDetail))) + '</div>' +
       '<div class="ce-tile"><h3>Commercial terms</h3>' + data(field('Deliverable',escape(candidate.deliverable)) + field('Rate / range',escape(rate(candidate))) + field('Contact route',link(candidate.routeUrl,candidate.route))) + '</div></div>' +
-      fold('Why it scored ' + result.total, '<p>Audience evidence contributes up to 65 points. Editorial fit contributes up to 35. Public reach is shown separately because sends, subscribers and downloads have different units.</p>' +
+      fold('Why it scored ' + result.total, '<p>Audience evidence contributes up to 65 points. Editorial fit contributes up to 35. The reach evidence grade describes the quality of the public figure. The connected build will compare reach within the same format, metric, scope and period.</p>' +
       data(field('Editorial fit · ' + result.editorial + '/12',candidate.grades.map(([n,reason]) => '<p><strong>' + n + '/4</strong> ' + escape(reason) + '</p>').join(''))) +
       '<p>' + link(candidate.source,'Public evidence') + ' · ' + link(candidate.sampleUrl,candidate.sample) + (candidate.supportingSource ? ' · ' + link(candidate.supportingSource,candidate.supportingLabel) : '') + '</p>') +
       '<p class="ce-note">' + escape(candidate.next) + '</p><p>' + link(candidate.sampleUrl,'Open content sample') + (candidate.id === 'cfo-show' ? ' · ' + link('https://scalenorth.com/insights/finance-and-accounting-outsourcing','Watch episode clips') : '') + '</p>' +
@@ -389,6 +401,10 @@
     'evostr-news':'Your BPO discovery piece made the case for defining the problem before quoting. Could we build on that with a practical example showing how finance BPO operators identify invoice exceptions before they automate?',
     nalto:'Your credentialing guidelines spell out the checks agencies must perform on a physician’s CV, references and licenses. Could we offer a short News Brief feature on organizing those documents and routing exceptions to a reviewer?'
   };
+  const briefDefaults = {
+    bpo: {angle:'Show how finance BPO teams review invoice exceptions before automating the workflow.',audience:'Finance outsourcing provider leaders in the US and Western Europe'},
+    rpo: {angle:'Show how staffing agencies organize credentialing evidence and route screening exceptions to a reviewer.',audience:'Staffing and recruitment agency leaders in the US and UK'}
+  };
   function renderContact() {
     const candidate = item();
     const rec = state();
@@ -399,9 +415,17 @@
       ? (active === 'bpo' ? 'Start with one finance workflow and map the exceptions. The exceptions show where a person still needs to make a judgment.' : 'Agree on what can be checked consistently, then route exceptions to the recruiter who can review them.')
       : excerpts[candidate.id] || candidate.pitch;
     const body = rec.draft ?? (channel === 'linkedin' || channel === 'instagram' ? defaultPitch + ' Open to a short outline?' : defaultPitch);
+    const deliverable = editorialQuote ? 'One attributed expert quote. Confirm the spokesperson and deadline.' : candidate.deliverable;
+    const brief = rec.brief ?? [
+      'Angle · ' + briefDefaults[active].angle,
+      'Audience · ' + briefDefaults[active].audience,
+      'Deliverable · ' + deliverable,
+      'CTA · ' + (editorialQuote ? 'Confirm the byline and track the published mention.' : 'Confirm placement for the Beam link and the next action for the audience.'),
+      'Reporting · ' + (editorialQuote ? 'Request the published URL and publication date.' : candidate.next)
+    ].join('\n\n');
     const sender = channel === 'email' ? 'Shared Beam Gmail · demo sender' : candidate.owner;
     const inbox = channel === 'email'
-      ? 'The shared Beam Gmail inbox sends the pitch and syncs replies on the same thread. Connect your work Gmail only if you want to send from your own mailbox.'
+      ? 'The connected build will send from a shared Beam Gmail inbox and sync replies on the same thread. This preview replays both events.'
       : 'Send through the creator’s published route, then log the send and paste any reply here. Follow-up reminders use the activity on this record.';
     find('contact').innerHTML = heading('Contact ' + candidate.name,candidate.placement) +
       '<div class="ce-split"><div class="ce-tile"><h3>' + (editorialQuote ? 'Expert quote draft' : 'Pitch draft') + '</h3><label class="ce-field" for="ce-channel">Channel</label><select id="ce-channel"' + (sent ? ' disabled' : '') + '>' +
@@ -410,10 +434,11 @@
       '<label class="ce-field" for="ce-draft">Message</label><textarea id="ce-draft"' + (sent ? ' readonly' : '') + '>' + escape(body) + '</textarea>' +
       '<p><small>Personalization source · ' + link(candidate.sampleUrl,candidate.sample) + '</small></p></div>' +
       '<div class="ce-tile"><h3>Sender and terms</h3>' + data(field('Owner',escape(candidate.owner)) + field('Sender',escape(sender)) +
-      field('Published route',link(candidate.routeUrl,candidate.route)) + field('Deliverable',escape(editorialQuote ? 'One attributed expert quote. Confirm the spokesperson and deadline.' : candidate.deliverable)) +
+      field('Published route',link(candidate.routeUrl,candidate.route)) + field('Deliverable',escape(deliverable)) +
       field('Public rate / range',escape(editorialQuote ? 'Confirm editorial terms' : rate(candidate))) + field('Quoted rate',escape(rec.quote || 'Awaiting reply'))) +
       '<p class="ce-note">' + escape(inbox) + '</p></div></div>' +
       (sent ? '' : action(channel === 'email' ? 'Approve and replay send' : 'Log demo send','send',channel,true)) +
+      fold('Collaboration brief','<label class="ce-field" for="ce-brief">Draft for this placement</label><textarea id="ce-brief" rows="9">' + escape(brief) + '</textarea>') +
       '<div class="ce-tile" style="margin-top:12px"><h3>Activity and replies</h3>' +
       (rec.events.length ? '<ol class="ce-instructions">' + rec.events.map(event => '<li>' + escape(event) + '</li>').join('') + '</ol>' : '<p class="ce-muted">Draft ready for review.</p>') +
       (rec.reply ? '<blockquote class="ce-note">' + escape(rec.reply) + '</blockquote>' : '') +
@@ -422,7 +447,12 @@
       (rec.stage === 'replied' ? action('Confirm booking · demo','book','',true) : '') +
       (rec.stage === 'booked' ? '<label class="ce-field" for="ce-published">Published placement URL</label><input type="text" id="ce-published" placeholder="https://…"><div class="ce-actions">' + action('Log publication','publish','',true) + action('Replay publication','publish','demo') + '</div><p id="ce-publish-error" role="alert"></p>' : '') +
       (sent ? '<div class="ce-actions">' + action('View outreach dashboard','results') + '</div>' : '') + '</div>' +
-      fold('Expert quote and release brief','<p>Record the question, spokesperson, deadline and published mention. Attach an approved Beam release for creator talking points.</p><div class="ce-actions">' + action(editorialQuote ? 'Return to placement pitch' : 'Draft an expert quote','quote-mode') + '</div>');
+      fold('Expert quote and release brief','<p>Record the question, spokesperson, deadline and published mention. Attach an approved Beam release for creator talking points.</p><div class="ce-actions">' + action(editorialQuote ? 'Return to placement pitch' : 'Draft an expert quote','quote-mode') + '</div>') +
+      teamQuestions([
+        ['Rabia','What makes a pitch and brief ready to use for a guest spot, paid placement or expert quote?'],
+        ['Babar','Which sender and reply permissions can we use? How should manual replies, declines and opt-outs clear the next action?'],
+        ['Ushna + Babar','Which test mailbox and recipient will we use for the live send?']
+      ]);
   }
 
   const stageLabels = {sent:'Awaiting reply',replied:'Replied',booked:'Booked',published:'Published',declined:'Declined',optedOut:'Opted out'};
@@ -469,7 +499,12 @@
             '<div>' + status(record) + '</div><div><strong>' + escape(latest(record)) + '</strong><small>' + escape(dateLabel(record.updatedAt) + ' · ' + (record.reply || record.events.at(-1) || 'Outreach recorded')) + '</small></div>' +
             '<div>' + escape(reach) + outcome + '</div></div>';
         }).join('') + '</div>' :
-        '<div class="ce-note">' + (all.length ? 'No outreach matches these filters.' : 'Outreach appears here once a send is recorded.') + '</div>');
+        '<div class="ce-note">' + (all.length ? 'No outreach matches these filters.' : 'Outreach appears here once a send is recorded.') + '</div>') +
+      teamQuestions([
+        ['Rabia','Which outcomes and next actions should be visible on every row?'],
+        ['Babar','Which test form and HubSpot property or association will verify credit? How should pending sync or qualification appear?'],
+        ['Faiz + Babar','Which IDs connect discovery, outreach and results, and who wires the UI?']
+      ]);
   }
 
   function renderOutcome(key) {
@@ -528,7 +563,7 @@
   }
 
   root.addEventListener('input',event => {
-    const keys = {'ce-draft':'draft','ce-subject':'subject'};
+    const keys = {'ce-draft':'draft','ce-subject':'subject','ce-brief':'brief'};
     if (keys[event.target.id] && selected) state()[keys[event.target.id]] = event.target.value;
   });
   root.addEventListener('change',event => {
